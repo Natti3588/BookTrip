@@ -26,3 +26,7 @@ Thumbs.db
 *.log
 npm-debug.log*
 pnpm-debug.log*
+
+# database
+**/prisma/*.db
+**/prisma/*.db-journal
