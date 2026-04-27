@@ -2,9 +2,7 @@ import { serve } from "@hono/node-server"
 import { Hono } from "hono"
 import booksRoute from "./routes/books.js"
 
-const app = new Hono()
-
-app.route("/api/books", booksRoute)
+const app = new Hono().route("/api/books", booksRoute)
 
 serve(
   {
@@ -15,3 +13,5 @@ serve(
     console.log(`Server is running on http://localhost:${info.port}`)
   },
 )
+
+export type AppType = typeof app
