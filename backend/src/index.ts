@@ -1,11 +1,10 @@
 import { serve } from "@hono/node-server"
 import { Hono } from "hono"
+import booksRoute from "./routes/books.js"
 
 const app = new Hono()
 
-app.get("/", (c) => {
-  return c.text("Hello Hono!")
-})
+app.route("/api/books", booksRoute)
 
 serve(
   {
