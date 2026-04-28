@@ -54,6 +54,12 @@ importers:
 
   frontend:
     dependencies:
+      backend:
+        specifier: workspace:*
+        version: link:../backend
+      hono:
+        specifier: ^4.12.14
+        version: 4.12.14
       react:
         specifier: ^19.2.5
         version: 19.2.5
