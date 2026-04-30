@@ -2,6 +2,8 @@ import { Hono } from "hono"
 import { prisma } from "../lib/prisma.js"
 
 const app = new Hono()
+
+const routes = app
   .get("/", async (c) => {
     const items = await prisma.book.findMany({ orderBy: { createdAt: "desc" } })
     return c.json(items)
@@ -14,4 +16,4 @@ const app = new Hono()
     return c.json(book)
   })
 
-export default app
+export default routes
