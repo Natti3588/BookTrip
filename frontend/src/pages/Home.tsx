@@ -11,7 +11,7 @@ const Home = () => {
   // レンダリング時に本のデータを取得
   useEffect(() => {
     getBooks()
-      .then((books) => setBooks(books))
+      .then((data) => setBooks(data))
       .catch((err: Error) => console.error("本の取得に失敗しました", err))
   }, [])
 
