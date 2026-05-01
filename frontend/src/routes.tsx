@@ -1,6 +1,7 @@
 import { createBrowserRouter, Navigate } from "react-router"
 import Layout from "./components/Layout"
 import BookList from "./pages/BookList"
+import BookAdd from "./pages/BookAdd"
 import Home from "./pages/Home"
 
 const router = createBrowserRouter([
@@ -11,6 +12,7 @@ const router = createBrowserRouter([
       { index: true, element: <Navigate to="/home" replace /> },
       { path: "home", element: <Home /> },
       { path: "books", element: <BookList /> },
+      { path: "books/add", element: <BookAdd /> },
     ],
   },
 ])
