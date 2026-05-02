@@ -7,7 +7,21 @@ const app = new Hono()
 
 const routes = app
   .get("/", async (c) => {
-    const items = await prisma.book.findMany({ orderBy: { createdAt: "desc" } })
+    const items = await prisma.book.findMany({
+      orderBy: { createdAt: "desc" },
+      select: {
+        id: true,
+        title: true,
+        author: true,
+        genre: true,
+        publishedYear: true,
+        coverImage: true,
+        description: true,
+        rating: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    })
     return c.json(items)
   })
 
