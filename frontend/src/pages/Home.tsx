@@ -100,9 +100,7 @@ const Home = () => {
         <div className="max-w-4xl mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold text-stone-800 mb-4">読書記録をもっと楽しく</h2>
           <p className="text-stone-700 text-lg leading-relaxed mb-8">
-            Book
-            Tripは、あなたの読書体験を記録し、管理するためのシンプルで美しいアプリケーションです。
-            お気に入りの本を追加して、あなただけのライブラリを作りましょう。
+            Book Tripは、あなたの読書体験を記録し共有するシンプルなアプリケーションです。
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
             <div className="bg-white p-6 rounded-lg shadow-sm border border-stone-200">
