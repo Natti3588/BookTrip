@@ -1,7 +1,7 @@
 import { createBrowserRouter, Navigate } from "react-router"
 import Layout from "./components/Layout"
-import BookList from "./pages/BookList"
 import BookAdd from "./pages/BookAdd"
+import BookList from "./pages/BookList"
 import Home from "./pages/Home"
 
 const router = createBrowserRouter([
