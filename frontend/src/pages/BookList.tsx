@@ -13,8 +13,8 @@ const BookList = () => {
       .catch((err: Error) => console.error("本の取得に失敗しました", err))
   }, [])
 
+  const term = searchTerm.toLowerCase()
   const filteredBooks = books.filter((book) => {
-    const term = searchTerm.toLowerCase()
     return (
       book.title.toLowerCase().includes(term) ||
       book.author.toLowerCase().includes(term) ||
