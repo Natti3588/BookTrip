@@ -25,12 +25,12 @@ const Layout = () => {
                 <span>ホーム</span>
               </NavLink>
 
-              <NavLink to="/books" className={navLinkClass}>
+              <NavLink to="/books" end className={navLinkClass}>
                 <Library className="w-5 h-5" />
                 <span>本の一覧</span>
               </NavLink>
 
-              <NavLink to="/books/add" className={navLinkClass}>
+              <NavLink to="/books/add" end className={navLinkClass}>
                 <Plus className="w-5 h-5" />
                 <span>本を追加</span>
               </NavLink>
