@@ -1,6 +1,7 @@
 import { zValidator } from "@hono/zod-validator"
 import { Hono } from "hono"
 import { prisma } from "../lib/prisma.js"
+import { Prisma } from "../generated/prisma/client.js"
 import { createBookSchema } from "../schemas/book.js"
 
 const app = new Hono()
@@ -43,6 +44,25 @@ const routes = app
       data: { ...data, userId: demoUser.id },
     })
     return c.json(book, 201)
+  })
+
+  .put("/:id", zValidator("json", createBookSchema), async (c) => {
+    const id = c.req.param("id")
+    const data = c.req.valid("json")
+
+    try {
+      const book = await prisma.book.update({
+        where: {id},
+        data,
+      })
+      return c.json(book)
+    } catch (err) {
+      if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === "P2025") {
+        return c.json({ error: "Not Found"}, 404)
+      }
+      // 想定外はHonoに任せる
+      throw err 
+    }
   })
 
 export default routes
