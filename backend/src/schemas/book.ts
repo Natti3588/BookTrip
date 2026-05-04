@@ -10,6 +10,7 @@ export const createBookSchema = z.object({
       "ビジネス",
       "自己啓発",
       "科学",
+      "技術",
       "歴史",
       "ファンタジー",
       "ミステリー",
