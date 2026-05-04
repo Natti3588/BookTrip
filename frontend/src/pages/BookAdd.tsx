@@ -195,11 +195,11 @@ const BookAdd = () => {
               className="w-full px-3 py-2 border border-stone-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500"
             >
               <option value="">未評価</option>
-              <option value="1">★☆☆☆☆ (1.0)</option>
-              <option value="2">★★☆☆☆ (2.0)</option>
-              <option value="3">★★★☆☆ (3.0)</option>
-              <option value="4">★★★★☆ (4.0)</option>
-              <option value="5">★★★★★ (5.0)</option>
+              <option value="1">★☆☆☆☆ (1)</option>
+              <option value="2">★★☆☆☆ (2)</option>
+              <option value="3">★★★☆☆ (3)</option>
+              <option value="4">★★★★☆ (4)</option>
+              <option value="5">★★★★★ (5)</option>
             </select>
             {errors.rating && <p className="mt-1 text-sm text-red-600">{errors.rating.message}</p>}
           </div>
