@@ -1,26 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { createBookSchema } from "backend/src/schemas/book"
+import { createBookSchema, GENRES } from "backend/src/schemas/book"
 import { ArrowLeft } from "lucide-react"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router"
 import { createBook, type createBookInput } from "../lib/books"
-
-export const GENRES = [
-  "小説",
-  "ノンフィクション",
-  "ビジネス",
-  "自己啓発",
-  "科学",
-  "歴史",
-  "ファンタジー",
-  "ミステリー",
-  "SF",
-  "ロマンス",
-  "詩",
-  "エッセイ",
-  "その他",
-] as const
 
 const FALLBACK_IMAGE = "https://placehold.co/300x450?text=No+Image"
 
