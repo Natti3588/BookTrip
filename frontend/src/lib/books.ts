@@ -19,8 +19,19 @@ export const getBook = async (id: string): Promise<Book> => {
 export const createBook = async (data: createBookInput) => {
   const res = await client.api.books.$post({ json: data })
   if (!res.ok) {
+    // レスポンスオブジェクトをJSONにパースし、失敗したら空のオブジェクトをbodyに入れる
     const body = await res.json().catch(() => ({}))
     throw new Error("error" in body ? body.error : "本の追加に失敗しました")
+  }
+  return res.json()
+}
+
+export const updateBook = async (id: string, data: createBookInput): Promise<Book> => {
+  const res = await client.api.books[":id"].$put({param: {id}, json: data})
+  if(!res.ok) {
+    // レスポンスオブジェクトをJSONにパースし、失敗したら空のオブジェクトをbodyに入れる
+    const body = await res.json().catch(() => ({}))
+    throw new Error("error" in body ? body.error : "本の更新に失敗しました")
   }
   return res.json()
 }
