@@ -1,8 +1,8 @@
 import { zValidator } from "@hono/zod-validator"
 import { Hono } from "hono"
-import { prisma } from "../lib/prisma.js"
 import { Prisma } from "../generated/prisma/client.js"
-import { createBookSchema } from "../schemas/book.js"
+import { prisma } from "../lib/prisma.js"
+import { bookIdParamSchema, createBookSchema } from "../schemas/book.js"
 
 const app = new Hono()
 
@@ -46,23 +46,41 @@ const routes = app
     return c.json(book, 201)
   })
 
-  .put("/:id", zValidator("json", createBookSchema), async (c) => {
-    const id = c.req.param("id")
-    const data = c.req.valid("json")
+  .put(
+    "/:id",
+    zValidator("param", bookIdParamSchema),
+    zValidator("json", createBookSchema),
+    async (c) => {
+      const { id } = c.req.valid("param")
+      const data = c.req.valid("json")
 
+      try {
+        const book = await prisma.book.update({
+          where: { id },
+          data,
+        })
+        return c.json(book)
+      } catch (err) {
+        if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === "P2025") {
+          return c.json({ error: "Not Found" }, 404)
+        }
+        // 想定外はHonoに任せる
+        throw err
+      }
+    },
+  )
+
+  .delete("/:id", zValidator("param", bookIdParamSchema), async (c) => {
+    const { id } = c.req.valid("param")
     try {
-      const book = await prisma.book.update({
-        where: {id},
-        data,
-      })
-      return c.json(book)
+      await prisma.book.delete({ where: { id } })
+      return c.body(null, 204)
     } catch (err) {
       if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === "P2025") {
-        return c.json({ error: "Not Found"}, 404)
+        return c.json({ error: "Not Found" }, 404)
       }
       // 想定外はHonoに任せる
-      throw err 
+      throw err
     }
   })
-
 export default routes
