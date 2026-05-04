@@ -1,58 +1,81 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { createBookSchema, GENRES } from "backend/src/schemas/book"
 import { ArrowLeft } from "lucide-react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
-import { useNavigate } from "react-router"
-import { createBook, type createBookInput } from "../lib/books"
+import { Link, useNavigate, useParams } from "react-router"
+import NotFoundView from "../components/NotFoundView"
+import { type Book, type createBookInput, getBook, updateBook } from "../lib/books"
 
 const FALLBACK_IMAGE = "https://placehold.co/300x450?text=No+Image"
 
-const BookAdd = () => {
+const BookEdit = () => {
+  const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
+
+  const [book, setBook] = useState<Book | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
   const [serverError, setServerError] = useState<string | null>(null)
 
   const {
     register,
     handleSubmit,
     watch,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm<createBookInput>({
     resolver: zodResolver(createBookSchema),
-    defaultValues: {
-      title: "",
-      author: "",
-      publishedYear: new Date().getFullYear(),
-      coverImage: "",
-      description: "",
-    },
   })
 
+  useEffect(() => {
+    if (!id) return
+
+    setIsLoading(true)
+    getBook(id)
+      .then((data) => {
+        setBook(data)
+        reset({
+          title: data.title,
+          author: data.author,
+          genre: data.genre as createBookInput["genre"],
+          publishedYear: data.publishedYear,
+          coverImage: data.coverImage,
+          description: data.description,
+          rating: data.rating ?? undefined,
+        })
+      })
+      .catch((err: Error) => console.error("本の取得に失敗しました", err))
+      .finally(() => setIsLoading(false))
+  }, [id, reset])
+
   const onSubmit = async (data: createBookInput) => {
+    if (!id) return
     setServerError(null)
     try {
-      await createBook(data)
-      navigate("/books?added=true")
+      await updateBook(id, data)
+      navigate(`/books/${id}`)
     } catch (err) {
-      setServerError(err instanceof Error ? err.message : "追加に失敗しました")
+      setServerError(err instanceof Error ? err.message : "更新に失敗しました")
     }
   }
 
   const coverImage = watch("coverImage")
 
+  if (isLoading) return <p className="text-center py-12 text-stone-600">読み込み中...</p>
+  if (!book) return <NotFoundView />
+
   return (
     <div className="max-w-2xl mx-auto">
-      <button
-        type="button"
-        onClick={() => navigate("/books")}
-        className="flex items-center text-stone-700 hover:text-stone-800 mb-6 transition-colors"
+      <Link
+        to={`/books/${id}`}
+        className="inline-flex items-center text-stone-700 hover:text-stone-800 mb-6 transition-colors"
       >
         <ArrowLeft className="w-5 h-5 mr-1" />
-        一覧に戻る
-      </button>
+        詳細に戻る
+      </Link>
 
       <div className="bg-white rounded-lg shadow-md p-8">
-        <h1 className="text-3xl font-bold text-stone-800 mb-6">本を追加</h1>
+        <h1 className="text-3xl font-bold text-stone-800 mb-6">本を編集</h1>
 
         {serverError && (
           <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md mb-6">
@@ -194,16 +217,14 @@ const BookAdd = () => {
               disabled={isSubmitting}
               className="flex-1 bg-amber-600 text-white py-2 px-4 rounded-md hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 transition-colors"
             >
-              {isSubmitting ? "追加中..." : "追加する"}
+              {isSubmitting ? "保存中..." : "保存"}
             </button>
-            <button
-              type="button"
-              onClick={() => navigate("/books")}
-              disabled={isSubmitting}
-              className="flex-1 bg-purple-200 text-stone-700 py-2 px-4 rounded-md hover:bg-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 transition-colors"
+            <Link
+              to={`/books/${id}`}
+              className="flex-1 bg-purple-200 text-stone-700 py-2 px-4 rounded-md text-center hover:bg-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 transition-colors"
             >
               キャンセル
-            </button>
+            </Link>
           </div>
         </form>
       </div>
@@ -211,4 +232,4 @@ const BookAdd = () => {
   )
 }
 
-export default BookAdd
+export default BookEdit

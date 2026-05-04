@@ -79,7 +79,7 @@ const BookList = () => {
                   <span className="inline-block px-2 py-1 bg-amber-100 text-amber-800 text-xs rounded">
                     {book.genre}
                   </span>
-                  {book.rating &&  (
+                  {book.rating && (
                     <div className="flex items-center">
                       <Star className="w-3 h-3 text-amber-500 fill-amber-500 mr-1" />
                       <span className="text-xs text-stone-700">{book.rating}</span>
