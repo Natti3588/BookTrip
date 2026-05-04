@@ -31,4 +31,8 @@ export const createBookSchema = z.object({
   rating: z.number().int().min(1).max(5).optional(),
 })
 
+export const bookIdParamSchema = z.object({
+  id: z.cuid2("不正なIDです"),
+})
+
 export type CreateBookInput = z.infer<typeof createBookSchema>
