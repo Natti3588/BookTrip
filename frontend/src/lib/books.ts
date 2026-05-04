@@ -27,8 +27,8 @@ export const createBook = async (data: createBookInput): Promise<Book> => {
 }
 
 export const updateBook = async (id: string, data: createBookInput): Promise<Book> => {
-  const res = await client.api.books[":id"].$put({param: {id}, json: data})
-  if(!res.ok) {
+  const res = await client.api.books[":id"].$put({ param: { id }, json: data })
+  if (!res.ok) {
     // レスポンスオブジェクトをJSONにパースし、失敗したら空のオブジェクトをbodyに入れる
     const body = await res.json().catch(() => ({}))
     throw new Error("error" in body ? body.error : "本の更新に失敗しました")
@@ -37,8 +37,8 @@ export const updateBook = async (id: string, data: createBookInput): Promise<Boo
 }
 
 export const deleteBook = async (id: string): Promise<void> => {
-  const res = await client.api.books[":id"].$delete({ param: {id}})
-  if(!res.ok) {
+  const res = await client.api.books[":id"].$delete({ param: { id } })
+  if (!res.ok) {
     // レスポンスオブジェクトをJSONにパースし、失敗したら空のオブジェクトをbodyに入れる
     const body = await res.json().catch(() => ({}))
     throw new Error("error" in body ? body.error : "本の削除に失敗しました")
