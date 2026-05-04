@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router"
 import { createBook, type createBookInput } from "../lib/books"
 
-const GENRES = [
+export const GENRES = [
   "小説",
   "ノンフィクション",
   "ビジネス",
