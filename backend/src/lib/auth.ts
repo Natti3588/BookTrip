@@ -19,14 +19,20 @@ export const createSession = async (userId: string) => {
 }
 
 export const validateSession = async (sessionId: string) => {
+  // Sessionテーブルからデータを取得
   const session = await prisma.session.findUnique({
     where: { id: sessionId },
   })
+
+  // データを取得できなかった場合はnullを返す 
   if (!session) return null
+
+  // セッション有効期限が過ぎていればば、Sessionテーブルからレコードを削除してnullを返す
   if (session.expiresAt < new Date()) {
     await prisma.session.delete({ where: { id: sessionId } }).catch(() => {})
     return null
   }
+  // 成功したらsessionを返す
   return session
 }
 

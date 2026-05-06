@@ -14,7 +14,7 @@ export const signupSchema = z
   })
 
 export const loginSchema = z.object({
-    email: z.email("メールアドレスの形式が正しくありません"),
-    // min(1)の理由は空欄のままサーバーに無駄な通信を発生させないため
-    password: z.string().min(1, "パスワードを入力してください"),
+  email: z.email("メールアドレスの形式が正しくありません"),
+  // min(1)の理由は空欄のままサーバーに無駄な通信を発生させないため
+  password: z.string().min(1, "パスワードを入力してください"),
 })
