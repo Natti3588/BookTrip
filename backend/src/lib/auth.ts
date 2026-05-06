@@ -4,6 +4,9 @@ import { prisma } from "./prisma.js"
 const SESSION_DURATION_MS = 7 * 24 * 60 * 60 * 1000 // ７日
 
 export const hashPassword = (plain: string) => bcrypt.hash(plain, 10)
+
+// タイミング攻撃（システムや暗号アルゴリズムの処理時間を推測してパスワードを盗む手法）
+// の対策としてタイミング攻撃対策付きのcompare()メソッドを使う。
 export const verifyPassword = (plain: string, hash: string) => bcrypt.compare(plain, hash)
 
 export const createSession = async (userId: string) => {
