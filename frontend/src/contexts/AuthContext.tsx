@@ -1,0 +1,59 @@
+import { createContext, useContext, useEffect, useMemo, useState } from "react"
+import {
+  getMe,
+  type LoginInput,
+  login as loginApi,
+  logout as logoutApi,
+  type SignupInput,
+  signup as signupApi,
+  type User,
+} from "../lib/auth"
+
+type AuthContextValue = {
+  currentUser: User | null
+  isLoading: boolean
+  signup: (data: SignupInput) => Promise<void>
+  login: (data: LoginInput) => Promise<void>
+  logout: () => Promise<void>
+}
+
+const AuthContext = createContext<AuthContextValue | undefined>(undefined)
+
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+  const [currentUser, setCurrentUser] = useState<User | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    getMe()
+      .then((data) => setCurrentUser(data))
+      .finally(() => setIsLoading(false))
+  }, [])
+
+  const signup = async (data: SignupInput) => {
+    const user = await signupApi(data)
+    setCurrentUser(user)
+  }
+
+  const login = async (data: LoginInput) => {
+    const user = await loginApi(data)
+    setCurrentUser(user)
+  }
+
+  const logout = async () => {
+    await logoutApi()
+    setCurrentUser(null)
+  }
+
+  const value = useMemo(
+    () => ({ currentUser, isLoading, signup, login, logout }),
+    [currentUser, isLoading],
+  )
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+}
+
+export const useAuth = () => {
+  const ctx = useContext(AuthContext)
+  if (!ctx) throw new Error("useAuthはAuthProvider内で使用する必要があります")
+  return ctx
+}
