@@ -24,7 +24,7 @@ export const validateSession = async (sessionId: string) => {
     where: { id: sessionId },
   })
 
-  // データを取得できなかった場合はnullを返す 
+  // データを取得できなかった場合はnullを返す
   if (!session) return null
 
   // セッション有効期限が過ぎていればば、Sessionテーブルからレコードを削除してnullを返す
