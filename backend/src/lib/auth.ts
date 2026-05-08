@@ -29,7 +29,7 @@ export const validateSession = async (sessionId: string) => {
 
   // セッション有効期限が過ぎていればば、Sessionテーブルからレコードを削除してnullを返す
   if (session.expiresAt < new Date()) {
-    await prisma.session.delete({ where: { id: sessionId } }).catch(() => {})
+    await prisma.session.deleteMany({ where: { id: sessionId } })
     return null
   }
   // 成功したらsessionを返す
@@ -37,4 +37,4 @@ export const validateSession = async (sessionId: string) => {
 }
 
 export const deleteSession = (sessionId: string) =>
-  prisma.session.delete({ where: { id: sessionId } }).catch(() => {})
+  prisma.session.deleteMany({ where: { id: sessionId } })
