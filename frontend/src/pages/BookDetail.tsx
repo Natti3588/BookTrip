@@ -4,15 +4,17 @@ import { Link, useNavigate, useParams } from "react-router"
 import DeleteConfirmDialog from "../components/DeleteConfirmDialog"
 import NotFoundView from "../components/NotFoundView"
 import Rating from "../components/Rating"
-import { type Book, deleteBook, getBook } from "../lib/books"
+import { useAuth } from "../contexts/AuthContext"
+import { type BookWithOwner, deleteBook, getBook } from "../lib/books"
 
 const FALLBACK_IMAGE = "https://placehold.co/300x450?text=No+Image"
 
 const BookDetail = () => {
   const { id } = useParams<{ id: string }>()
+  const { currentUser } = useAuth()
   const navigate = useNavigate()
 
-  const [book, setBook] = useState<Book | null>(null)
+  const [book, setBook] = useState<BookWithOwner | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
@@ -48,6 +50,8 @@ const BookDetail = () => {
   const dateLabel = isUpdated ? "最終更新日" : "登録日"
   const dateValue = isUpdated ? book.updatedAt : book.createdAt
 
+  const isOwner = !!currentUser && !!book && currentUser.id === book.userId
+
   return (
     <div className="max-w-4xl mx-auto">
       <Link
@@ -61,23 +65,25 @@ const BookDetail = () => {
       <div className="bg-white rounded-lg shadow-md overflow-hidden">
         <div className="bg-stone-50 px-6 py-4 border-b border-stone-200 flex justify-between items-center">
           <h1 className="text-2xl font-bold text-stone-800">本の詳細</h1>
-          <div className="flex space-x-2">
-            <Link
-              to={`/books/${book.id}/edit`}
-              className="flex items-center space-x-1 px-4 py-2 bg-amber-600 text-white rounded-md hover:bg-amber-700 transition-colors"
-            >
-              <Edit2 className="w-4 h-4" />
-              <span>編集</span>
-            </Link>
-            <button
-              type="button"
-              onClick={() => setShowDeleteDialog(true)}
-              className="flex items-center space-x-1 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
-            >
-              <Trash2 className="w-4 h-4" />
-              <span>削除</span>
-            </button>
-          </div>
+          {isOwner && (
+            <div className="flex space-x-2">
+              <Link
+                to={`/books/${book.id}/edit`}
+                className="flex items-center space-x-1 px-4 py-2 bg-amber-600 text-white rounded-md hover:bg-amber-700 transition-colors"
+              >
+                <Edit2 className="w-4 h-4" />
+                <span>編集</span>
+              </Link>
+              <button
+                type="button"
+                onClick={() => setShowDeleteDialog(true)}
+                className="flex items-center space-x-1 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+              >
+                <Trash2 className="w-4 h-4" />
+                <span>削除</span>
+              </button>
+            </div>
+          )}
         </div>
 
         <div className="p-6 flex flex-col md:flex-row gap-8">
