@@ -32,10 +32,13 @@ const Layout = () => {
                 <span>本の一覧</span>
               </NavLink>
 
+              {currentUser && (
               <NavLink to="/books/add" end className={navLinkClass}>
                 <Plus className="w-5 h-5" />
                 <span>本を追加</span>
               </NavLink>
+              )}
+              
 
               <div className="flex items-center space-x-3 ml-4 pl-4 border-l border-stone-200">
                 {currentUser ? (
