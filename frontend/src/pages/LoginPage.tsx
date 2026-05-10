@@ -107,6 +107,17 @@ const LoginPage = () => {
             新規登録
           </Link>
         </p>
+
+         <div className="mt-4 text-center">
+    <Link
+      to="/home"
+      className="inline-flex items-center gap-1 text-sm text-stone-500 hover:text-stone-700"
+    >
+      <span>ゲストはこちら</span>
+      <span aria-hidden="true">→</span>
+    </Link>
+  </div>
+
       </div>
     </div>
   )
