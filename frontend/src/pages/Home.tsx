@@ -2,10 +2,12 @@ import { Star } from "lucide-react"
 import { useEffect, useState } from "react"
 import { SiGithub } from "react-icons/si"
 import { Link } from "react-router"
+import { useAuth } from "../contexts/AuthContext"
 import { type Book, getBooks } from "../lib/books"
 
 const Home = () => {
   const [books, setBooks] = useState<Book[]>([])
+  const { currentUser } = useAuth()
   const GITHUB_URL = "https://github.com/Natti3588"
 
   // レンダリング時に本のデータを取得
@@ -34,12 +36,21 @@ const Home = () => {
             >
               本を探す
             </Link>
-            <Link
-              to="/books/add"
-              className="px-8 py-3 bg-amber-600 text-white rounded-lg font-bold hover:bg-amber-700 transition-colors shadow-md"
-            >
-              本を追加
-            </Link>
+            {currentUser ? (
+              <Link
+                to="/books/add"
+                className="px-8 py-3 bg-amber-600 text-white rounded-lg font-bold hover:bg-amber-700 transition-colors shadow-md"
+              >
+                本を追加
+              </Link>
+            ) : (
+              <Link
+                to="/signup"
+                className="px-8 py-3 bg-amber-600 text-white rounded-lg font-bold hover:bg-amber-700 transition-colors shadow-md"
+              >
+                登録して本を追加する
+              </Link>
+            )}
           </div>
         </div>
       </section>
@@ -123,8 +134,8 @@ const Home = () => {
               <div className="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-2xl">💾</span>
               </div>
-              <h3 className="font-bold text-lg text-stone-800 mb-2">ローカル保存</h3>
-              <p className="text-stone-600 text-sm">あなたのデータは安全にブラウザに保存</p>
+              <h3 className="font-bold text-lg text-stone-800 mb-2">セッション管理</h3>
+              <p className="text-stone-600 text-sm">一度ログインすれば快適に</p>
             </div>
           </div>
         </div>

@@ -1,8 +1,9 @@
 import { serve } from "@hono/node-server"
 import { Hono } from "hono"
+import authRoute from "./routes/auth.js"
 import booksRoute from "./routes/books.js"
 
-const app = new Hono().route("/api/books", booksRoute)
+const app = new Hono().route("/api/books", booksRoute).route("/api/auth", authRoute)
 
 serve(
   {

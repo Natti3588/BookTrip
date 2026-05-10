@@ -5,8 +5,12 @@ import BookDetail from "./pages/BookDetail"
 import BookEdit from "./pages/BookEdit"
 import BookList from "./pages/BookList"
 import Home from "./pages/Home"
+import LoginPage from "./pages/LoginPage"
+import SignupPage from "./pages/Signup"
 
 const router = createBrowserRouter([
+  { path: "login", element: <LoginPage /> },
+  { path: "signup", element: <SignupPage /> },
   {
     path: "/",
     element: <Layout />,
