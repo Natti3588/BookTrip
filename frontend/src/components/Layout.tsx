@@ -33,12 +33,11 @@ const Layout = () => {
               </NavLink>
 
               {currentUser && (
-              <NavLink to="/books/add" end className={navLinkClass}>
-                <Plus className="w-5 h-5" />
-                <span>本を追加</span>
-              </NavLink>
+                <NavLink to="/books/add" end className={navLinkClass}>
+                  <Plus className="w-5 h-5" />
+                  <span>本を追加</span>
+                </NavLink>
               )}
-              
 
               <div className="flex items-center space-x-3 ml-4 pl-4 border-l border-stone-200">
                 {currentUser ? (
@@ -61,7 +60,12 @@ const Layout = () => {
                     >
                       ログイン
                     </Link>
-                    <Link to="/signup" className="flex items-center space-x-1 px-3 py-2 text-stone-700 hover:bg-stone-100 rounded-md transition-colors">新規登録</Link>
+                    <Link
+                      to="/signup"
+                      className="flex items-center space-x-1 px-3 py-2 text-stone-700 hover:bg-stone-100 rounded-md transition-colors"
+                    >
+                      新規登録
+                    </Link>
                   </>
                 )}
               </div>
