@@ -1,6 +1,6 @@
 /**
  *  本リソース（/api/books）に対するAPIラッパー
- * 
+ *
  * - 型は Hono RPC Clientから自動推論
  * - read系（getBooks / getBook）は失敗時に英文Error（dev向け、 console用）
  * - mutation系（create / update / delete）は失敗時に日本語Error（UI表示用）
@@ -44,7 +44,7 @@ export const getBook = async (id: string): Promise<BookWithOwner> => {
 
 // レスポンスから日本語エラーメッセージを取り出す共通ヘルパー
 // - body.errorがstringならそれを返す(バックエンドのメッセージ)
-// - JSONではない / errorキーがない / 文字列でない場合はfallbackを返す 
+// - JSONではない / errorキーがない / 文字列でない場合はfallbackを返す
 const extractError = async (res: Response, fallback: string): Promise<string> => {
   // レスポンスをJSONにパース 失敗したら空のオブジェクトを取得
   const body = await res.json().catch(() => ({}))
