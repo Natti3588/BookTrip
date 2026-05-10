@@ -1,11 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { createBookSchema, GENRES } from "backend/src/schemas/book"
+import { GENRES, updateBookSchema } from "backend/src/schemas/book"
 import { ArrowLeft } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { Link, useNavigate, useParams } from "react-router"
 import NotFoundView from "../components/NotFoundView"
-import { type Book, type createBookInput, getBook, updateBook } from "../lib/books"
+import { type Book, getBook, updateBook, type updateBookInput } from "../lib/books"
 
 const FALLBACK_IMAGE = "https://placehold.co/300x450?text=No+Image"
 
@@ -23,8 +23,8 @@ const BookEdit = () => {
     watch,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm<createBookInput>({
-    resolver: zodResolver(createBookSchema),
+  } = useForm<updateBookInput>({
+    resolver: zodResolver(updateBookSchema),
   })
 
   useEffect(() => {
@@ -37,7 +37,7 @@ const BookEdit = () => {
         reset({
           title: data.title,
           author: data.author,
-          genre: data.genre as createBookInput["genre"],
+          genre: data.genre as updateBookInput["genre"],
           publishedYear: data.publishedYear,
           coverImage: data.coverImage,
           description: data.description,
@@ -48,7 +48,7 @@ const BookEdit = () => {
       .finally(() => setIsLoading(false))
   }, [id, reset])
 
-  const onSubmit = async (data: createBookInput) => {
+  const onSubmit = async (data: updateBookInput) => {
     if (!id) return
     setServerError(null)
     try {
