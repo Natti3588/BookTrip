@@ -1,9 +1,11 @@
 import { BookOpen, Calendar, Star, User } from "lucide-react"
 import { useEffect, useState } from "react"
 import { Link } from "react-router"
+import { useAuth } from "../contexts/AuthContext"
 import { type Book, getBooks } from "../lib/books"
 
 const BookList = () => {
+  const { currentUser } = useAuth()
   const [books, setBooks] = useState<Book[]>([])
   const [searchTerm, setSearchTerm] = useState("")
 
@@ -41,14 +43,22 @@ const BookList = () => {
           <p className="text-stone-700 text-lg">
             {searchTerm ? "検索結果が見つかりませんでした" : "本が登録されていません"}
           </p>
-          {!searchTerm && (
-            <Link
-              to="/books/add"
-              className="inline-block mt-4 px-6 py-2 bg-amber-600 text-white rounded-md hover:bg-amber-700 transition-colors"
-            >
-              最初の本を追加する
-            </Link>
-          )}
+          {!searchTerm &&
+            (currentUser ? (
+              <Link
+                to="/books/add"
+                className="inline-block mt-4 px-6 py-2 bg-amber-600 text-white rounded-md hover:bg-amber-700 transition-colors"
+              >
+                最初の本を追加する
+              </Link>
+            ) : (
+              <Link
+                to="/signup"
+                className="inline-block mt-4 px-6 py-2 bg-amber-600 text-white rounded-md hover:bg-amber-700 transition-colors"
+              >
+                登録して最初の本を追加する
+              </Link>
+            ))}
         </div>
       ) : (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6">
