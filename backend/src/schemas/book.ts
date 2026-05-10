@@ -38,5 +38,3 @@ export const updateBookSchema = bookFieldSchema
 export const bookIdParamSchema = z.object({
   id: z.cuid2("不正なIDです"),
 })
-
-export type CreateBookInput = z.infer<typeof createBookSchema>
