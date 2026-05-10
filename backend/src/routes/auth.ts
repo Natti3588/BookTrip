@@ -65,10 +65,12 @@ const routes = app
     // 名前がsessionのCookieを取得
     const sessionId = getCookie(c, "session")
 
+    // Cookieが取得出来たら、データベースのセッションIDを削除
     if (sessionId) {
       await deleteSession(sessionId)
     }
 
+    // 名前絵がsessionのCOokieを削除
     deleteCookie(c, "session", { path: "/" })
     return c.json({ ok: true })
   })
