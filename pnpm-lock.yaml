@@ -23,7 +23,7 @@ importers:
       '@hono/zod-validator':
         specifier: ^0.7.6
         version: 0.7.6(hono@4.12.14)(zod@4.4.1)
-      '@prisma/adapter-better-sqlite3':
+      '@prisma/adapter-pg':
         specifier: ^7.8.0
         version: 7.8.0
       '@prisma/client':
@@ -35,9 +35,6 @@ importers:
       bcrypt:
         specifier: ^6.0.0
         version: 6.0.0
-      better-sqlite3:
-        specifier: ^12.9.0
-        version: 12.9.0
       hono:
         specifier: ^4.12.14
         version: 4.12.14
@@ -48,12 +45,12 @@ importers:
         specifier: ^4.4.1
         version: 4.4.1
     devDependencies:
-      '@types/better-sqlite3':
-        specifier: ^7.6.13
-        version: 7.6.13
       '@types/node':
         specifier: ^20.11.17
         version: 20.19.39
+      '@types/pg':
+        specifier: ^8.20.0
+        version: 8.20.0
       dotenv:
         specifier: ^17.4.2
         version: 17.4.2
@@ -487,8 +484,8 @@ packages:
   '@oxc-project/types@0.126.0':
     resolution: {integrity: sha512-oGfVtjAgwQVVpfBrbtk4e1XDyWHRFta6BS3GWVzrF8xYBT2VGQAk39yJS/wFSMrZqoiCU4oghT3Ch0HaHGIHcQ==}
 
-  '@prisma/adapter-better-sqlite3@7.8.0':
-    resolution: {integrity: sha512-9p0HvQNaRoOaUForDcp1MPIjylmCamYQjQpEogpdesLr14g3NwAsYR3bHL9wFi8tn21TPDVQPzcZi+SxXEokSA==}
+  '@prisma/adapter-pg@7.8.0':
+    resolution: {integrity: sha512-ygb3UkerK3v8MDpXVgCISdRNDozpxh6+JVJgiIGbSr5KBgz10LLf5ejUskPGoXlsIjxsOu6nuy1JVQr2EKGSlg==}
 
   '@prisma/client-runtime-utils@7.8.0':
     resolution: {integrity: sha512-5NQZztQ0oY/ADFkmd9gPuweH5A1/CCY8YQPorLLO0Mu6a87mY5gsnDkzmFmIHs9NFaLnZojzgddFVN4RpKYrdw==}
@@ -890,14 +887,14 @@ packages:
   '@types/bcrypt@6.0.0':
     resolution: {integrity: sha512-/oJGukuH3D2+D+3H4JWLaAsJ/ji86dhRidzZ/Od7H/i8g+aCmvkeCc6Ni/f9uxGLSQVCRZkX2/lqEFG2BvWtlQ==}
 
-  '@types/better-sqlite3@7.6.13':
-    resolution: {integrity: sha512-NMv9ASNARoKksWtsq/SHakpYAYnhBrQgGD8zkLYk/jaK8jUGn08CfEdTRgYhMypUQAfzSP8W6gNLe0q19/t4VA==}
-
   '@types/node@20.19.39':
     resolution: {integrity: sha512-orrrD74MBUyK8jOAD/r0+lfa1I2MO6I+vAkmAWzMYbCcgrN4lCrmK52gRFQq/JRxfYPfonkr4b0jcY7Olqdqbw==}
 
   '@types/node@24.12.2':
     resolution: {integrity: sha512-A1sre26ke7HDIuY/M23nd9gfB+nrmhtYyMINbjI1zHJxYteKR6qSMX56FsmjMcDb3SMcjJg5BiRRgOCC/yBD0g==}
+
+  '@types/pg@8.20.0':
+    resolution: {integrity: sha512-bEPFOaMAHTEP1EzpvHTbmwR8UsFyHSKsRisLIHVMXnpNefSbGA1bD6CVy+qKjGSqmZqNqBDV2azOBo8TgkcVow==}
 
   '@types/react-dom@19.2.3':
     resolution: {integrity: sha512-jp2L/eY6fn+KgVVQAOqYItbF0VY/YApe5Mz2F0aykSO8gx31bYCZyvSeYxCHKvzHG5eZjc+zyaS5BrBWya2+kQ==}
@@ -1339,6 +1336,40 @@ packages:
   perfect-debounce@2.1.0:
     resolution: {integrity: sha512-LjgdTytVFXeUgtHZr9WYViYSM/g8MkcTPYDlPa3cDqMirHjKiSZPYd6DoL7pK8AJQr+uWkQvCjHNdiMqsrJs+g==}
 
+  pg-cloudflare@1.3.0:
+    resolution: {integrity: sha512-6lswVVSztmHiRtD6I8hw4qP/nDm1EJbKMRhf3HCYaqud7frGysPv7FYJ5noZQdhQtN2xJnimfMtvQq21pdbzyQ==}
+
+  pg-connection-string@2.12.0:
+    resolution: {integrity: sha512-U7qg+bpswf3Cs5xLzRqbXbQl85ng0mfSV/J0nnA31MCLgvEaAo7CIhmeyrmJpOr7o+zm0rXK+hNnT5l9RHkCkQ==}
+
+  pg-int8@1.0.1:
+    resolution: {integrity: sha512-WCtabS6t3c8SkpDBUlb1kjOs7l66xsGdKpIPZsg4wR+B3+u9UAum2odSsF9tnvxg80h4ZxLWMy4pRjOsFIqQpw==}
+    engines: {node: '>=4.0.0'}
+
+  pg-pool@3.13.0:
+    resolution: {integrity: sha512-gB+R+Xud1gLFuRD/QgOIgGOBE2KCQPaPwkzBBGC9oG69pHTkhQeIuejVIk3/cnDyX39av2AxomQiyPT13WKHQA==}
+    peerDependencies:
+      pg: '>=8.0'
+
+  pg-protocol@1.13.0:
+    resolution: {integrity: sha512-zzdvXfS6v89r6v7OcFCHfHlyG/wvry1ALxZo4LqgUoy7W9xhBDMaqOuMiF3qEV45VqsN6rdlcehHrfDtlCPc8w==}
+
+  pg-types@2.2.0:
+    resolution: {integrity: sha512-qTAAlrEsl8s4OiEQY69wDvcMIdQN6wdz5ojQiOy6YRMuynxenON0O5oCpJI6lshc6scgAY8qvJ2On/p+CXY0GA==}
+    engines: {node: '>=4'}
+
+  pg@8.20.0:
+    resolution: {integrity: sha512-ldhMxz2r8fl/6QkXnBD3CR9/xg694oT6DZQ2s6c/RI28OjtSOpxnPrUCGOBJ46RCUxcWdx3p6kw/xnDHjKvaRA==}
+    engines: {node: '>= 16.0.0'}
+    peerDependencies:
+      pg-native: '>=3.0.1'
+    peerDependenciesMeta:
+      pg-native:
+        optional: true
+
+  pgpass@1.0.5:
+    resolution: {integrity: sha512-FdW9r/jQZhSeohs1Z3sI1yxFQNFvMcnmfuj4WBMUTxOrAyLMaTcE1aAMBiTlbMNaXvBCQuVi0R7hd8udDSP7ug==}
+
   picocolors@1.1.1:
     resolution: {integrity: sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA==}
 
@@ -1352,6 +1383,26 @@ packages:
   postcss@8.5.10:
     resolution: {integrity: sha512-pMMHxBOZKFU6HgAZ4eyGnwXF/EvPGGqUr0MnZ5+99485wwW41kW91A4LOGxSHhgugZmSChL5AlElNdwlNgcnLQ==}
     engines: {node: ^10 || ^12 || >=14}
+
+  postgres-array@2.0.0:
+    resolution: {integrity: sha512-VpZrUqU5A69eQyW2c5CA1jtLecCsN2U/bD6VilrFDWq5+5UIEVO7nazS3TEcHf1zuPYO/sqGvUvW62g86RXZuA==}
+    engines: {node: '>=4'}
+
+  postgres-array@3.0.4:
+    resolution: {integrity: sha512-nAUSGfSDGOaOAEGwqsRY27GPOea7CNipJPOA7lPbdEpx5Kg3qzdP0AaWC5MlhTWV9s4hFX39nomVZ+C4tnGOJQ==}
+    engines: {node: '>=12'}
+
+  postgres-bytea@1.0.1:
+    resolution: {integrity: sha512-5+5HqXnsZPE65IJZSMkZtURARZelel2oXUEO8rH83VS/hxH5vv1uHquPg5wZs8yMAfdv971IU+kcPUczi7NVBQ==}
+    engines: {node: '>=0.10.0'}
+
+  postgres-date@1.0.7:
+    resolution: {integrity: sha512-suDmjLVQg78nMK2UZ454hAG+OAW+HQPZ6n++TNDUX+L0+uUlLywnoxJKDou51Zm+zTCjrCl0Nq6J9C5hP9vK/Q==}
+    engines: {node: '>=0.10.0'}
+
+  postgres-interval@1.2.0:
+    resolution: {integrity: sha512-9ZhXKM/rw350N1ovuWHbGxnGh/SNJ4cnxHiM0rxE4VN41wsg8P8zWn9hv/buK00RP4WvlOyr/RBDiptyxVbkZQ==}
+    engines: {node: '>=0.10.0'}
 
   postgres@3.4.7:
     resolution: {integrity: sha512-Jtc2612XINuBjIl/QTWsV5UvE8UHuNblcO3vVADSrKsrc6RqGX6lOW1cEo3CM2v0XG4Nat8nI+YM7/f26VxXLw==}
@@ -1498,6 +1549,10 @@ packages:
     resolution: {integrity: sha512-UXWMKhLOwVKb728IUtQPXxfYU+usdybtUrK/8uGE8CQMvrhOpwvzDBwj0QhSL7MQc7vIsISBG8VQ8+IDQxpfQA==}
     engines: {node: '>=0.10.0'}
 
+  split2@4.2.0:
+    resolution: {integrity: sha512-UcjcJOWknrNkF6PLX83qcHM6KHgVKNkV62Y8a5uYDVv9ydGQVwAHMKqHdJje1VTWpljG0WYpCDhrCdAOYH4TWg==}
+    engines: {node: '>= 10.x'}
+
   sqlstring@2.3.3:
     resolution: {integrity: sha512-qC9iz2FlN7DQl3+wjwn3802RTyjCx7sDvfQEXchwa6CWOx07/WVfh91gBmQ9fahw8snwGEWU3xGzOt4tFyHLxg==}
     engines: {node: '>= 0.6'}
@@ -1628,6 +1683,10 @@ packages:
 
   wrappy@1.0.2:
     resolution: {integrity: sha512-l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ==}
+
+  xtend@4.0.2:
+    resolution: {integrity: sha512-LKYU1iAXJXUgAXn9URjiu+MWhyUXHsvfp7mcuYm9dSUKK0/CjtrUwFAxD82/mCWbtLsGjFIad0wIsod4zrTAEQ==}
+    engines: {node: '>=0.4'}
 
   yallist@3.1.1:
     resolution: {integrity: sha512-a4UGQaWPH59mOXUYnAG2ewncQS4i4F43Tv3JoAM+s2VDAmS9NsK8GpDMLrCHPksFT7h3K6TOoUNn2pb7RoXx4g==}
@@ -1927,10 +1986,14 @@ snapshots:
 
   '@oxc-project/types@0.126.0': {}
 
-  '@prisma/adapter-better-sqlite3@7.8.0':
+  '@prisma/adapter-pg@7.8.0':
     dependencies:
       '@prisma/driver-adapter-utils': 7.8.0
-      better-sqlite3: 12.9.0
+      '@types/pg': 8.20.0
+      pg: 8.20.0
+      postgres-array: 3.0.4
+    transitivePeerDependencies:
+      - pg-native
 
   '@prisma/client-runtime-utils@7.8.0': {}
 
@@ -2259,10 +2322,6 @@ snapshots:
     dependencies:
       '@types/node': 24.12.2
 
-  '@types/better-sqlite3@7.6.13':
-    dependencies:
-      '@types/node': 24.12.2
-
   '@types/node@20.19.39':
     dependencies:
       undici-types: 6.21.0
@@ -2270,6 +2329,12 @@ snapshots:
   '@types/node@24.12.2':
     dependencies:
       undici-types: 7.16.0
+
+  '@types/pg@8.20.0':
+    dependencies:
+      '@types/node': 24.12.2
+      pg-protocol: 1.13.0
+      pg-types: 2.2.0
 
   '@types/react-dom@19.2.3(@types/react@19.2.14)':
     dependencies:
@@ -2300,7 +2365,8 @@ snapshots:
     dependencies:
       '@babel/types': 7.29.0
 
-  base64-js@1.5.1: {}
+  base64-js@1.5.1:
+    optional: true
 
   baseline-browser-mapping@2.10.20: {}
 
@@ -2315,16 +2381,19 @@ snapshots:
     dependencies:
       bindings: 1.5.0
       prebuild-install: 7.1.3
+    optional: true
 
   bindings@1.5.0:
     dependencies:
       file-uri-to-path: 1.0.0
+    optional: true
 
   bl@4.1.0:
     dependencies:
       buffer: 5.7.1
       inherits: 2.0.4
       readable-stream: 3.6.2
+    optional: true
 
   browserslist@4.28.2:
     dependencies:
@@ -2338,6 +2407,7 @@ snapshots:
     dependencies:
       base64-js: 1.5.1
       ieee754: 1.2.1
+    optional: true
 
   c12@3.3.4:
     dependencies:
@@ -2364,7 +2434,8 @@ snapshots:
     dependencies:
       readdirp: 5.0.0
 
-  chownr@1.1.4: {}
+  chownr@1.1.4:
+    optional: true
 
   confbox@0.2.4: {}
 
@@ -2387,8 +2458,10 @@ snapshots:
   decompress-response@6.0.0:
     dependencies:
       mimic-response: 3.1.0
+    optional: true
 
-  deep-extend@0.6.0: {}
+  deep-extend@0.6.0:
+    optional: true
 
   deepmerge-ts@7.1.5: {}
 
@@ -2414,6 +2487,7 @@ snapshots:
   end-of-stream@1.4.5:
     dependencies:
       once: 1.4.0
+    optional: true
 
   enhanced-resolve@5.21.0:
     dependencies:
@@ -2453,7 +2527,8 @@ snapshots:
 
   escalade@3.2.0: {}
 
-  expand-template@2.0.3: {}
+  expand-template@2.0.3:
+    optional: true
 
   exsolve@1.0.8: {}
 
@@ -2469,14 +2544,16 @@ snapshots:
     optionalDependencies:
       picomatch: 4.0.4
 
-  file-uri-to-path@1.0.0: {}
+  file-uri-to-path@1.0.0:
+    optional: true
 
   foreground-child@3.3.1:
     dependencies:
       cross-spawn: 7.0.6
       signal-exit: 4.1.0
 
-  fs-constants@1.0.0: {}
+  fs-constants@1.0.0:
+    optional: true
 
   fsevents@2.3.3:
     optional: true
@@ -2495,7 +2572,8 @@ snapshots:
 
   giget@3.2.0: {}
 
-  github-from-package@0.0.0: {}
+  github-from-package@0.0.0:
+    optional: true
 
   graceful-fs@4.2.11: {}
 
@@ -2511,11 +2589,14 @@ snapshots:
     dependencies:
       safer-buffer: 2.1.2
 
-  ieee754@1.2.1: {}
+  ieee754@1.2.1:
+    optional: true
 
-  inherits@2.0.4: {}
+  inherits@2.0.4:
+    optional: true
 
-  ini@1.3.8: {}
+  ini@1.3.8:
+    optional: true
 
   is-property@1.0.2: {}
 
@@ -2596,11 +2677,14 @@ snapshots:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.5.5
 
-  mimic-response@3.1.0: {}
+  mimic-response@3.1.0:
+    optional: true
 
-  minimist@1.2.8: {}
+  minimist@1.2.8:
+    optional: true
 
-  mkdirp-classic@0.5.3: {}
+  mkdirp-classic@0.5.3:
+    optional: true
 
   ms@2.1.3: {}
 
@@ -2622,11 +2706,13 @@ snapshots:
 
   nanoid@3.3.11: {}
 
-  napi-build-utils@2.0.0: {}
+  napi-build-utils@2.0.0:
+    optional: true
 
   node-abi@3.89.0:
     dependencies:
       semver: 7.7.4
+    optional: true
 
   node-addon-api@8.7.0: {}
 
@@ -2639,12 +2725,48 @@ snapshots:
   once@1.4.0:
     dependencies:
       wrappy: 1.0.2
+    optional: true
 
   path-key@3.1.1: {}
 
   pathe@2.0.3: {}
 
   perfect-debounce@2.1.0: {}
+
+  pg-cloudflare@1.3.0:
+    optional: true
+
+  pg-connection-string@2.12.0: {}
+
+  pg-int8@1.0.1: {}
+
+  pg-pool@3.13.0(pg@8.20.0):
+    dependencies:
+      pg: 8.20.0
+
+  pg-protocol@1.13.0: {}
+
+  pg-types@2.2.0:
+    dependencies:
+      pg-int8: 1.0.1
+      postgres-array: 2.0.0
+      postgres-bytea: 1.0.1
+      postgres-date: 1.0.7
+      postgres-interval: 1.2.0
+
+  pg@8.20.0:
+    dependencies:
+      pg-connection-string: 2.12.0
+      pg-pool: 3.13.0(pg@8.20.0)
+      pg-protocol: 1.13.0
+      pg-types: 2.2.0
+      pgpass: 1.0.5
+    optionalDependencies:
+      pg-cloudflare: 1.3.0
+
+  pgpass@1.0.5:
+    dependencies:
+      split2: 4.2.0
 
   picocolors@1.1.1: {}
 
@@ -2662,6 +2784,18 @@ snapshots:
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
+  postgres-array@2.0.0: {}
+
+  postgres-array@3.0.4: {}
+
+  postgres-bytea@1.0.1: {}
+
+  postgres-date@1.0.7: {}
+
+  postgres-interval@1.2.0:
+    dependencies:
+      xtend: 4.0.2
+
   postgres@3.4.7: {}
 
   prebuild-install@7.1.3:
@@ -2678,6 +2812,7 @@ snapshots:
       simple-get: 4.0.1
       tar-fs: 2.1.4
       tunnel-agent: 0.6.0
+    optional: true
 
   prisma@7.8.0(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(better-sqlite3@12.9.0)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)(typescript@5.9.3):
     dependencies:
@@ -2707,6 +2842,7 @@ snapshots:
     dependencies:
       end-of-stream: 1.4.5
       once: 1.4.0
+    optional: true
 
   pure-rand@6.1.0: {}
 
@@ -2721,6 +2857,7 @@ snapshots:
       ini: 1.3.8
       minimist: 1.2.8
       strip-json-comments: 2.0.1
+    optional: true
 
   react-dom@19.2.5(react@19.2.5):
     dependencies:
@@ -2750,6 +2887,7 @@ snapshots:
       inherits: 2.0.4
       string_decoder: 1.3.0
       util-deprecate: 1.0.2
+    optional: true
 
   readdirp@5.0.0: {}
 
@@ -2782,7 +2920,8 @@ snapshots:
       '@rolldown/binding-win32-arm64-msvc': 1.0.0-rc.16
       '@rolldown/binding-win32-x64-msvc': 1.0.0-rc.16
 
-  safe-buffer@5.2.1: {}
+  safe-buffer@5.2.1:
+    optional: true
 
   safer-buffer@2.1.2: {}
 
@@ -2790,7 +2929,8 @@ snapshots:
 
   semver@6.3.1: {}
 
-  semver@7.7.4: {}
+  semver@7.7.4:
+    optional: true
 
   seq-queue@0.0.5: {}
 
@@ -2806,15 +2946,19 @@ snapshots:
 
   signal-exit@4.1.0: {}
 
-  simple-concat@1.0.1: {}
+  simple-concat@1.0.1:
+    optional: true
 
   simple-get@4.0.1:
     dependencies:
       decompress-response: 6.0.0
       once: 1.4.0
       simple-concat: 1.0.1
+    optional: true
 
   source-map-js@1.2.1: {}
+
+  split2@4.2.0: {}
 
   sqlstring@2.3.3: {}
 
@@ -2823,8 +2967,10 @@ snapshots:
   string_decoder@1.3.0:
     dependencies:
       safe-buffer: 5.2.1
+    optional: true
 
-  strip-json-comments@2.0.1: {}
+  strip-json-comments@2.0.1:
+    optional: true
 
   tailwindcss@4.2.4: {}
 
@@ -2836,6 +2982,7 @@ snapshots:
       mkdirp-classic: 0.5.3
       pump: 3.0.4
       tar-stream: 2.2.0
+    optional: true
 
   tar-stream@2.2.0:
     dependencies:
@@ -2844,6 +2991,7 @@ snapshots:
       fs-constants: 1.0.0
       inherits: 2.0.4
       readable-stream: 3.6.2
+    optional: true
 
   tinyglobby@0.2.16:
     dependencies:
@@ -2863,6 +3011,7 @@ snapshots:
   tunnel-agent@0.6.0:
     dependencies:
       safe-buffer: 5.2.1
+    optional: true
 
   turbo@2.9.6:
     optionalDependencies:
@@ -2887,7 +3036,8 @@ snapshots:
       escalade: 3.2.0
       picocolors: 1.1.1
 
-  util-deprecate@1.0.2: {}
+  util-deprecate@1.0.2:
+    optional: true
 
   valibot@1.2.0(typescript@5.9.3):
     optionalDependencies:
@@ -2911,7 +3061,10 @@ snapshots:
     dependencies:
       isexe: 2.0.0
 
-  wrappy@1.0.2: {}
+  wrappy@1.0.2:
+    optional: true
+
+  xtend@4.0.2: {}
 
   yallist@3.1.1: {}
 
