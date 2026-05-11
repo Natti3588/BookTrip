@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "turbo run dev",
     "build": "turbo run build",
+    "deploy:build": "pnpm install --frozen-lockfile && pnpm --filter frontend build && cp -r frontend/dist backend/public && pnpm --filter backend build && pnpm --filter backend exec prisma migrate deploy",
     "lint": "biome lint .",
     "format": "biome format --write .",
     "check": "biome check --write ."
