@@ -28,6 +28,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     // getMeはHTTP STATUS401をnullで返す
     getMe()
       .then((data) => setCurrentUser(data))
+      .catch((err) => {
+        // ネットワーク障害やサーバー異常時は「未ログイン扱い」
+        console.error(`Failed to fetch current user:`, err)
+        setCurrentUser(null)
+      })
       .finally(() => setIsLoading(false))
   }, [])
 
