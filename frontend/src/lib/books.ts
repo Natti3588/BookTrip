@@ -16,9 +16,9 @@ export type Book = InferResponseType<typeof client.api.books.$get>[number]
 // GET /api/books/:id のレスポンス型（200 のみ抽出） 所有者判定用に userId を含む
 export type BookWithOwner = InferResponseType<(typeof client.api.books)[":id"]["$get"], 200>
 // POST /api/books のJSONリクエストボディの型 BookAddのフォーム入力型として使う
-export type createBookInput = InferRequestType<typeof client.api.books.$post>["json"]
+export type CreateBookInput = InferRequestType<typeof client.api.books.$post>["json"]
 // PUT /api/books/:id のJSONリクエストボディ型 BookEditフォームの入力型として使う
-export type updateBookInput = InferRequestType<(typeof client.api.books)[":id"]["$put"]>["json"]
+export type UpdateBookInput = InferRequestType<(typeof client.api.books)[":id"]["$put"]>["json"]
 
 // 本の一覧をサーバーから取得する
 // - 並び順: 更新日時の降順
@@ -45,7 +45,7 @@ export const getBook = async (id: string): Promise<BookWithOwner> => {
 
 // 本を新規登録する BookAddのフォーム送信時に呼ばれる
 // - 失敗時: バックエンドの日本語エラー、またはfallbackをErrorとしてthrow
-export const createBook = async (data: createBookInput): Promise<Book> => {
+export const createBook = async (data: CreateBookInput): Promise<Book> => {
   // POST /api/books（jsonボディ）を呼ぶCookieで認証する
   const res = await client.api.books.$post({ json: data })
   // 失敗時は日本語メッセージでthrow
@@ -57,7 +57,7 @@ export const createBook = async (data: createBookInput): Promise<Book> => {
 // 既存の本を更新する BookEditの保存時に呼ばれる
 // - 戻り値がvoid: バックエンドは204 NoContextで返すため
 // - 404の意味: 本がない or 他のユーザーの本（情報秘匿のために区別しない）
-export const updateBook = async (id: string, data: updateBookInput): Promise<void> => {
+export const updateBook = async (id: string, data: UpdateBookInput): Promise<void> => {
   // PUT /api/books/:id（jsonボディ）を呼ぶ Cookieで認証する
   const res = await client.api.books[":id"].$put({ param: { id }, json: data })
   // 失敗時は日本語メッセージで throw

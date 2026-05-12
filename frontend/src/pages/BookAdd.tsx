@@ -4,7 +4,7 @@ import { ArrowLeft } from "lucide-react"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router"
-import { createBook, type createBookInput } from "../lib/books"
+import { createBook, type CreateBookInput } from "../lib/books"
 
 const FALLBACK_IMAGE = "https://placehold.co/300x450?text=No+Image"
 
@@ -17,7 +17,7 @@ const BookAdd = () => {
     handleSubmit,
     watch,
     formState: { errors, isSubmitting },
-  } = useForm<createBookInput>({
+  } = useForm<CreateBookInput>({
     resolver: zodResolver(createBookSchema),
     defaultValues: {
       title: "",
@@ -28,7 +28,7 @@ const BookAdd = () => {
     },
   })
 
-  const onSubmit = async (data: createBookInput) => {
+  const onSubmit = async (data: CreateBookInput) => {
     setServerError(null)
     try {
       await createBook(data)
