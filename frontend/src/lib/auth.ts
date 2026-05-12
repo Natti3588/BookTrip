@@ -1,6 +1,6 @@
 /**
  * 認証リソースに（/api/auth）に対するAPIラッパー
- * 
+ *
  * - 型は Hono RPC Client から自動推論
  * - 失敗時はすべて日本語の error を throw（UI表示のため）
  *   バックエンドが返す { error: "日本語" }を尊重するが、なければfallbackを使う
@@ -9,6 +9,7 @@
 
 import type { InferRequestType, InferResponseType } from "hono"
 import { client } from "../api/rpc"
+import { extractError } from "./api-error"
 
 // POST /api/auth/signup のリクエストボディ型 Signup の入力型として使う
 export type SignupInput = InferRequestType<typeof client.api.auth.signup.$post>["json"]
@@ -25,26 +26,20 @@ export const signup = async (data: SignupInput): Promise<User> => {
   const res = await client.api.auth.signup.$post({ json: data })
 
   // 失敗時は日本語メッセージでthrow
-  if (!res.ok) {
-    const body = await res.json().catch(() => ({}))
-    throw new Error("error" in body ? body.error : "新規登録に失敗しました")
-  }
+  if (!res.ok) throw new Error(await extractError(res, "新規登録に失敗しました"))
   // 成功したらレスポンスをUserとしてパース
   return res.json()
 }
 
 // ログインする LoginForm の送信時に呼ばれる
 // - 成功時: Set-Cookieでセッションが自動付与
-// - 失敗時: バックエンドの日本語エラー、または fallback をthrow 
+// - 失敗時: バックエンドの日本語エラー、または fallback をthrow
 export const login = async (data: LoginInput): Promise<User> => {
   // POST /api/auth/login（jsonボディ）を呼ぶ
   const res = await client.api.auth.login.$post({ json: data })
 
   // 失敗時は日本語メッセージでthrow
-  if (!res.ok) {
-    const body = await res.json().catch(() => ({}))
-    throw new Error("error" in body ? body.error : "ログインに失敗しました")
-  }
+  if (!res.ok) throw new Error(await extractError(res, "ログインに失敗しました"))
   // 成功したらレスポンスを User としてパース
   return res.json()
 }
