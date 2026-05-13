@@ -1,3 +1,14 @@
+/**
+ * 本リソース（/api/books）のルーティング
+ * 
+ * - GET （一覧 / 詳細）: 未ログインでも閲覧可
+ * - POST / PUT / DELETE: AuthMiddlewareでログイン必須　＋　自分の本のみ操作可
+ * - 所有者チェックは where: { id: userId }で実現
+ * - updateMany / deleteMany を使うのは「存在しない」と「他人の本」を　count === 0
+ * 　で同じ404にまとめるため
+ * - 更新・削除の成功時は 204 No Content
+ */
+
 import { zValidator } from "@hono/zod-validator"
 import { Hono } from "hono"
 import { prisma } from "../lib/prisma.js"
@@ -6,9 +17,11 @@ import { bookIdParamSchema, createBookSchema, updateBookSchema } from "../schema
 
 const app = new Hono()
 
+// 本の一覧を返す（未ログインでも閲覧可）
+// - 並び順: 更新日時の降順
+// - userIdは selectに含めない（一覧では所有者情報を返さない方針）
 const routes = app
   .get("/", async (c) => {
-    // BookテーブルにあるuserIdカラムを除くすべてのレコードを更新日時で取得
     const books = await prisma.book.findMany({
       orderBy: { updatedAt: "desc" },
       select: {
@@ -24,73 +37,68 @@ const routes = app
         updatedAt: true,
       },
     })
-    // 取得したデータをJSONで返す
     return c.json(books)
   })
 
+  // 本の詳細を返す（未ログインでも閲覧可）
+  // - userId を含めて返す: フロントでどのユーザーに「編集・削除ボタンを出すか」の判定に使うから
+  // - 見つからない場合は 404
   .get("/:id", zValidator("param", bookIdParamSchema), async (c) => {
-    // バリデーション済みのURLパラメータを取得
     const { id } = c.req.valid("param")
-    // 取得したidを使ってbookを取得
     const book = await prisma.book.findUnique({ where: { id } })
-    // bookにnullが帰ったらJSONでerrorを返す
     if (!book) return c.json({ error: "本が見つかりません" }, 404)
-    // bookの取得に成功したらbookをJSONで返す
     return c.json(book)
   })
 
+  // 本を新規作成する（ログイン必須）
+  // - userId は Cookie 経由で authMiddleware がセットしたものを利用
+  // - 成功時は作成した本を 201 で返す
   .post("/", authMiddleware, zValidator("json", createBookSchema), async (c) => {
-    // バリデーション済みの本作成データを取得
     const data = c.req.valid("json")
-    // コンテキストからuserIdを取得
     const userId = c.get("userId")
-    // 取得したdata, userIdを使って本を追加
     const book = await prisma.book.create({
       data: { ...data, userId },
     })
-    // 追加に成功したら作成したbookをJSONで返す
     return c.json(book, 201)
   })
 
+  // 本を更新する（ログイン必須、自分の本のみ）
+  // - updateMany + where: { id, userId } で「自分の本だけ」を対象に
+  // - 404 の意味: 「本がない」か「他人の本」
+  // - 成功時は 204 No Context
   .put(
     "/:id",
     authMiddleware,
     zValidator("param", bookIdParamSchema),
     zValidator("json", updateBookSchema),
     async (c) => {
-      // バリデーション済みのid, dataを取得
       const { id } = c.req.valid("param")
       const data = c.req.valid("json")
-      // コンテキストからuserIdを取得
       const userId = c.get("userId")
-      // idとuserIdがそれぞれ一致したら更新
       const result = await prisma.book.updateMany({
         where: { id, userId },
         data,
       })
 
-      // 更新件数がゼロの場合Errorを返す
       if (result.count === 0) {
         return c.json({ error: "本が見つかりません" }, 404)
       }
-      // 成功したらnullで204を返す
       return c.body(null, 204)
     },
   )
 
+  // 本を削除する（ログイン必須、自分の本のみ）
+  // ^ deleteMany を使う理由は PUT と同じ
+  // - 404 の意味も PUT と同じ
+  // - 成功時は 204 No Context
   .delete("/:id", authMiddleware, zValidator("param", bookIdParamSchema), async (c) => {
-    // バリデーション済みのURLパラメータを取得
     const { id } = c.req.valid("param")
-    // コンテキストからuserIdを取得
     const userId = c.get("userId")
-    // id, userIdが一致したら削除
     const result = await prisma.book.deleteMany({ where: { id, userId } })
 
-    // 削除件数が0の場合errorを返す
     if (result.count === 0) {
       return c.json({ error: "本が見つかりません" }, 404)
     }
-    // 成功したらnullで204を返す
     return c.body(null, 204)
   })
 
