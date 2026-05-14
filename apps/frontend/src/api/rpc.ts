@@ -1,4 +1,4 @@
-import type { AppType } from "backend/src/index"
+import type { AppType } from "@myapp/backend/src/index"
 import { hc } from "hono/client"
 
 // Hono(backend)へCookieを送信するために、credentialsを設定

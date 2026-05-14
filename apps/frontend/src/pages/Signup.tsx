@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { signupSchema } from "backend/src/schemas/auth"
+import { signupSchema } from "@myapp/backend/src/schemas/auth"
 import { BookOpen, Eye, EyeOff } from "lucide-react"
 import { useState } from "react"
 import { useForm } from "react-hook-form"

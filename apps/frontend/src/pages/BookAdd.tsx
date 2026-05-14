@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { createBookSchema, GENRES } from "backend/src/schemas/book"
+import { createBookSchema, GENRES } from "@myapp/backend/src/schemas/book"
 import { ArrowLeft } from "lucide-react"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
