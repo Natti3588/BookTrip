@@ -15,7 +15,7 @@ importers:
         specifier: ^2.0.0
         version: 2.9.6
 
-  backend:
+  apps/backend:
     dependencies:
       '@hono/node-server':
         specifier: ^1.19.14
@@ -61,12 +61,12 @@ importers:
         specifier: ^5.8.3
         version: 5.9.3
 
-  frontend:
+  apps/frontend:
     dependencies:
       '@hookform/resolvers':
         specifier: ^5.2.2
         version: 5.2.2(react-hook-form@7.75.0(react@19.2.5))
-      backend:
+      '@myapp/backend':
         specifier: workspace:*
         version: link:../backend
       hono:
