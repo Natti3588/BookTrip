@@ -8,12 +8,12 @@
     },
     "generate": {
       "inputs": ["prisma/schema.prisma"],
-      "outputs": ["generated/**"]
+      "outputs": ["generated/**"],
+      "env": ["DATABASE_URL"]
     },
     "build": {
       "dependsOn": ["^build", "generate"],
-      "outputs": ["dist/**", "build/**"],
-      "env": ["DATABASE_URL"]
+      "outputs": ["dist/**", "build/**"]
     },
     "lint": {}
   }
