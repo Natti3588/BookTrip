@@ -1,6 +1,6 @@
 packages:
-  - "backend"
-  - "frontend"
+  - "apps/*"
+  - "packages/*"
 allowBuilds:
   '@prisma/engines': false
   esbuild: false

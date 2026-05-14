@@ -5,6 +5,10 @@ node_modules/
 dist/
 build/
 backend/public
+apps/backend/public
+
+# Prisma generated client
+**/generated/
 
 # turborepo
 .turbo/
