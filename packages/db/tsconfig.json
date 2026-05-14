@@ -1,11 +1,10 @@
 {
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "target": "ESNext",
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "strict": true,
-    "verbatimModuleSyntax": true,
-    "skipLibCheck": true,
     "declaration": true,
     "rootDir": ".",
     "outDir": "./dist"
