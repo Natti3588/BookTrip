@@ -9,7 +9,7 @@
 
 import type { InferRequestType, InferResponseType } from "hono"
 import { client } from "../api/rpc"
-import { extractError } from "./api-error"
+import { extractError } from "@myapp/utils"
 
 // POST /api/auth/signup のリクエストボディ型 Signup の入力型として使う
 export type SignupInput = InferRequestType<typeof client.api.auth.signup.$post>["json"]

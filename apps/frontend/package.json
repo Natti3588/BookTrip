@@ -11,6 +11,7 @@
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
     "@myapp/backend": "workspace:*",
+    "@myapp/utils": "workspace:*",
     "hono": "^4.12.14",
     "lucide-react": "^1.12.0",
     "react": "^19.2.5",

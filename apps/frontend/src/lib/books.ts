@@ -9,7 +9,7 @@
 
 import type { InferRequestType, InferResponseType } from "hono"
 import { client } from "../api/rpc"
-import { extractError } from "./api-error"
+import { extractError } from "@myapp/utils"
 
 // GET /api/books（一覧）のレスポンス1件分の型 所有者(userId)は含まない
 export type Book = InferResponseType<typeof client.api.books.$get>[number]
