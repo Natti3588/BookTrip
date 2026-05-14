@@ -11,9 +11,8 @@
 import { zValidator } from "@hono/zod-validator"
 import { Hono } from "hono"
 import { deleteCookie, getCookie, setCookie } from "hono/cookie"
-import { Prisma } from "../generated/prisma/client.js"
+import { Prisma, prisma } from "@myapp/db"
 import { createSession, deleteSession, hashPassword, verifyPassword } from "../lib/auth.js"
-import { prisma } from "../lib/prisma.js"
 import { authMiddleware } from "../middleware/auth.js"
 import { loginSchema, signupSchema } from "../schemas/auth.js"
 

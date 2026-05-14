@@ -11,7 +11,7 @@
 
 import { zValidator } from "@hono/zod-validator"
 import { Hono } from "hono"
-import { prisma } from "../lib/prisma.js"
+import { prisma } from "@myapp/db"
 import { authMiddleware } from "../middleware/auth.js"
 import { bookIdParamSchema, createBookSchema, updateBookSchema } from "../schemas/book.js"
 

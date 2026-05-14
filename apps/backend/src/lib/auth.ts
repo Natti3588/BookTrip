@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt"
-import { prisma } from "./prisma.js"
+import { prisma } from "@myapp/db"
 
 const SESSION_DURATION_MS = 7 * 24 * 60 * 60 * 1000 // ７日
 
