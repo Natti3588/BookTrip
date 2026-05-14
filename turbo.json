@@ -12,7 +12,8 @@
     },
     "build": {
       "dependsOn": ["^build", "generate"],
-      "outputs": ["dist/**", "build/**"]
+      "outputs": ["dist/**", "build/**"],
+      "env": ["DATABSE_URL"]
     },
     "lint": {}
   }
