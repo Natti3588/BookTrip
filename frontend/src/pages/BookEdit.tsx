@@ -5,7 +5,7 @@ import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { Link, useNavigate, useParams } from "react-router"
 import NotFoundView from "../components/NotFoundView"
-import { type Book, getBook, updateBook, type updateBookInput } from "../lib/books"
+import { type Book, getBook, updateBook, type UpdateBookInput } from "../lib/books"
 
 const FALLBACK_IMAGE = "https://placehold.co/300x450?text=No+Image"
 
@@ -23,7 +23,7 @@ const BookEdit = () => {
     watch,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm<updateBookInput>({
+  } = useForm<UpdateBookInput>({
     resolver: zodResolver(updateBookSchema),
   })
 
@@ -37,7 +37,7 @@ const BookEdit = () => {
         reset({
           title: data.title,
           author: data.author,
-          genre: data.genre as updateBookInput["genre"],
+          genre: data.genre as UpdateBookInput["genre"],
           publishedYear: data.publishedYear,
           coverImage: data.coverImage,
           description: data.description,
@@ -48,7 +48,7 @@ const BookEdit = () => {
       .finally(() => setIsLoading(false))
   }, [id, reset])
 
-  const onSubmit = async (data: updateBookInput) => {
+  const onSubmit = async (data: UpdateBookInput) => {
     if (!id) return
     setServerError(null)
     try {

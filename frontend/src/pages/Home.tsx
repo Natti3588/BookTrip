@@ -154,7 +154,7 @@ const Home = () => {
             <SiGithub className="w-6 h-6" />
             <span>GitHub でコードを見る</span>
           </a>
-          <p className="text-stone-400 text-sm mt-8">© 2026 Book Portfolio. All rights reserved.</p>
+          <p className="text-stone-400 text-sm mt-8">© 2026 Book Trip</p>
         </div>
       </footer>
     </div>
