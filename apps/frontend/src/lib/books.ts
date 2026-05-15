@@ -7,9 +7,9 @@
  *   バックエンドが返す{ error: "日本語" }を尊重するが、なければfallbackを使う
  */
 
+import { extractError } from "@myapp/utils"
 import type { InferRequestType, InferResponseType } from "hono"
 import { client } from "../api/rpc"
-import { extractError } from "@myapp/utils"
 
 // GET /api/books（一覧）のレスポンス1件分の型 所有者(userId)は含まない
 export type Book = InferResponseType<typeof client.api.books.$get>[number]

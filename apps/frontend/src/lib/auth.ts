@@ -7,9 +7,9 @@
  * - getMeのみ例外的に「未ログイン状態をnull」で表現（ログイン状態を確認する目的のため）
  */
 
+import { extractError } from "@myapp/utils"
 import type { InferRequestType, InferResponseType } from "hono"
 import { client } from "../api/rpc"
-import { extractError } from "@myapp/utils"
 
 // POST /api/auth/signup のリクエストボディ型 Signup の入力型として使う
 export type SignupInput = InferRequestType<typeof client.api.auth.signup.$post>["json"]

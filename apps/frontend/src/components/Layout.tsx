@@ -1,6 +1,8 @@
 import { BookOpen, Home, Library, LogOut, Plus } from "lucide-react"
 import { Link, NavLink, Outlet, useLocation } from "react-router"
 import { useAuth } from "../contexts/AuthContext"
+import UserMenu from "./UserMenu"
+import GuestMenu from "./GuestMenu"
 
 const navLinkClass = ({ isActive }: { isActive: boolean }) =>
   `flex items-center space-x-1 px-3 py-2 rounded-md transition-colors ${
@@ -9,7 +11,7 @@ const navLinkClass = ({ isActive }: { isActive: boolean }) =>
 
 const Layout = () => {
   const location = useLocation()
-  const { currentUser, logout } = useAuth()
+  const { currentUser } = useAuth()
 
   return (
     <div className="min-h-screen bg-stone-50">
@@ -41,32 +43,9 @@ const Layout = () => {
 
               <div className="flex items-center space-x-3 ml-4 pl-4 border-l border-stone-200">
                 {currentUser ? (
-                  <>
-                    <span className="text-sm text-stone-700">{currentUser.name}</span>
-                    <button
-                      type="button"
-                      onClick={() => logout()}
-                      className="flex items-center space-x-1 px-3 py-2 text-stone-700 hover:bg-red-50 hover:text-red-600 rounded-md transition-colors"
-                    >
-                      <LogOut className="w-5 h-5" />
-                      <span>ログアウト</span>
-                    </button>
-                  </>
+                  <UserMenu />
                 ) : (
-                  <>
-                    <Link
-                      to="/login"
-                      className="flex items-center space-x-1 px-3 py-2 text-stone-700 hover:bg-stone-100 rounded-md transition-colors"
-                    >
-                      ログイン
-                    </Link>
-                    <Link
-                      to="/signup"
-                      className="flex items-center space-x-1 px-3 py-2 text-stone-700 hover:bg-stone-100 rounded-md transition-colors"
-                    >
-                      新規登録
-                    </Link>
-                  </>
+                  <GuestMenu />
                 )}
               </div>
             </nav>
