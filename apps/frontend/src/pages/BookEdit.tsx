@@ -5,7 +5,7 @@ import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { Link, useNavigate, useParams } from "react-router"
 import NotFoundView from "../components/NotFoundView"
-import { type Book, getBook, updateBook, type UpdateBookInput } from "../lib/books"
+import { type Book, getBook, type UpdateBookInput, updateBook } from "../lib/books"
 
 const FALLBACK_IMAGE = "https://placehold.co/300x450?text=No+Image"
 

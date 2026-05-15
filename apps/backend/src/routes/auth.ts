@@ -5,13 +5,13 @@
  * - セキュリティ方針:
  *   - パスワードは bcrypt でハッシュ化
  *   - loginは「ユーザーが存在しない」と「パスワード不一致」を同じエラーで返す
- *   - /me は select　でpasswordHash を返さない 
+ *   - /me は select　でpasswordHash を返さない
  */
 
 import { zValidator } from "@hono/zod-validator"
+import { Prisma, prisma } from "@myapp/db"
 import { Hono } from "hono"
 import { deleteCookie, getCookie, setCookie } from "hono/cookie"
-import { Prisma, prisma } from "@myapp/db"
 import { createSession, deleteSession, hashPassword, verifyPassword } from "../lib/auth.js"
 import { authMiddleware } from "../middleware/auth.js"
 import { loginSchema, signupSchema } from "../schemas/auth.js"

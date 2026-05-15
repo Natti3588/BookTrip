@@ -4,7 +4,7 @@
  * - isLoading: 初回マウント時の getMeが終わるまで true
  *  -> 認証チェックが完了前にログイン画面を出さないため
  * - signup / login / logout: APIを叩いて currentUserにセットする
- * 
+ *
  * useAuth は AuthProvider 配下のコンポーネントからのみ呼べる
  */
 
@@ -34,7 +34,7 @@ const AuthContext = createContext<AuthContextValue | undefined>(undefined)
 // アプリ全体を囲む AuthProvider 配下で useAuthが使える
 // - 起動時: getMe で Cookie由来のログイン状態を復元
 // - signup / login: 成功時に currentUserを更新
-// - logout: サーバー結果にかかわらずクライアント側の状態を破棄 
+// - logout: サーバー結果にかかわらずクライアント側の状態を破棄
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null)
   // 小コンポーネントで「認証チェック完了化」を判断するためのstate

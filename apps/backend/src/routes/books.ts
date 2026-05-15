@@ -1,6 +1,6 @@
 /**
  * 本リソース（/api/books）のルーティング
- * 
+ *
  * - GET （一覧 / 詳細）: 未ログインでも閲覧可
  * - POST / PUT / DELETE: AuthMiddlewareでログイン必須　＋　自分の本のみ操作可
  * - 所有者チェックは where: { id: userId }で実現
@@ -10,8 +10,8 @@
  */
 
 import { zValidator } from "@hono/zod-validator"
-import { Hono } from "hono"
 import { prisma } from "@myapp/db"
+import { Hono } from "hono"
 import { authMiddleware } from "../middleware/auth.js"
 import { bookIdParamSchema, createBookSchema, updateBookSchema } from "../schemas/book.js"
 
