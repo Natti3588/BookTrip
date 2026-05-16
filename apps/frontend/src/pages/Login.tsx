@@ -8,6 +8,12 @@ import PasswordInput from "../components/PasswordInput"
 import { useAuth } from "../contexts/AuthContext"
 import type { LoginInput } from "../lib/auth"
 
+// ログイン画面
+// - メール / パスワードを入力
+// - react-hook-form + zodResolver でバリデーション（バックエンドの loginSchema を直接 import）
+// - 成功時: AuthContext.login で currentUser を更新し /home に遷移
+// - 失敗時: serverError にメッセージを set してフォーム下に表示
+// - 「ゲストはこちら」で未ログインのまま /home に進める
 const LoginPage = () => {
   const navigate = useNavigate()
   const { login } = useAuth()
@@ -25,6 +31,9 @@ const LoginPage = () => {
     },
   })
 
+  // フォーム送信時の処理
+  // - 成功時: /home に遷移
+  // - 失敗時: serverError にメッセージを set（バックエンドの日本語エラー、または fallback）
   const onSubmit = async (data: LoginInput) => {
     setServerError(null)
     try {
