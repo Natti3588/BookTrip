@@ -17,6 +17,12 @@ export type SignupInput = InferRequestType<typeof client.api.auth.signup.$post>[
 export type LoginInput = InferRequestType<typeof client.api.auth.login.$post>["json"]
 // POST /api/auth/signup の成功時（201）のレスポンス型 AuthContextで currentUserとして保持
 export type User = InferResponseType<typeof client.api.auth.signup.$post, 201>
+// PATCH /api/auth/me のリクエストボディ型 Profile の名前変更フォームから使う
+export type UpdateNameInput = InferRequestType<typeof client.api.auth.me.$patch>["json"]
+// PUT /api/auth/me/password のリクエストボディ型 Profile のパスワード変更フォームから使う
+export type UpdatePasswordInput = InferRequestType<typeof client.api.auth.me.password.$put>["json"]
+// DELETE /api/auth/me のリクエストボディ型 DeleteAccountDialog から使う
+export type DeleteAccountInput = InferRequestType<typeof client.api.auth.me.$delete>["json"]
 
 // 新規登録する　Signupの送信時に呼ばれる
 // - 成功時: Set-Cookieでセッションが自動付与される
@@ -58,4 +64,29 @@ export const getMe = async (): Promise<User | null> => {
   if (status === 401) return null
   if (!res.ok) throw new Error(`ユーザー情報の取得に失敗しました（HTTP ${status}）`)
   return res.json()
+}
+
+// ユーザー名を変更する Profile の名前変更フォームから呼ばれる
+// - 成功時: 更新後の id / email / name を返す
+// - 失敗時: バックエンドの日本語エラー、または fallback を throw
+export const updateName = async (data: UpdateNameInput): Promise<User> => {
+  const res = await client.api.auth.me.$patch({ json: data })
+  if (!res.ok) throw new Error(await extractError(res, "ユーザー名の変更に失敗しました"))
+  return res.json()
+}
+
+// パスワードを変更する Profile のパスワード変更フォームから呼ばれる
+// - 成功時: 204 No Content（戻り値は void）
+// - 失敗時: バックエンドの日本語エラー、または fallback を throw
+export const updatePassword = async (data: UpdatePasswordInput): Promise<void> => {
+  const res = await client.api.auth.me.password.$put({ json: data })
+  if (!res.ok) throw new Error(await extractError(res, "パスワードの変更に失敗しました"))
+}
+
+// アカウントを削除する DeleteAccountDialog から呼ばれる
+// - 成功時: 204 No Content（戻り値は void） サーバー側で Cookie も消える
+// - 失敗時: バックエンドの日本語エラー、または fallback を throw
+export const deleteAccount = async (data: DeleteAccountInput): Promise<void> => {
+  const res = await client.api.auth.me.$delete({ json: data })
+  if (!res.ok) throw new Error(await extractError(res, "アカウントの削除に失敗しました"))
 }
