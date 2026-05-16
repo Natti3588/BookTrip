@@ -40,6 +40,30 @@ const routes = app
     return c.json(books)
   })
 
+  // 自分の投稿した本一覧を返す（ログイン必須）
+  // - 認証ミドルウェアで設定したuserIdで絞り込み
+  // - userIdは自分の本だとわかりきって言るためselectから除外
+  .get("/me", authMiddleware, async (c) => {
+    const userId = c.get("userId")
+    const books = await prisma.book.findMany({
+      where: { userId },
+      orderBy: { updatedAt: "desc" },
+      select: {
+        id: true,
+        title: true,
+        author: true,
+        genre: true,
+        publishedYear: true,
+        coverImage: true,
+        description: true,
+        rating: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    })
+    return c.json(books)
+  })
+
   // 本の詳細を返す（未ログインでも閲覧可）
   // - userId を含めて返す: フロントでどのユーザーに「編集・削除ボタンを出すか」の判定に使うから
   // - 見つからない場合は 404

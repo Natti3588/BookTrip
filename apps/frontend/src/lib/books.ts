@@ -15,6 +15,8 @@ import { client } from "../api/rpc"
 export type Book = InferResponseType<typeof client.api.books.$get>[number]
 // GET /api/books/:id のレスポンス型（200 のみ抽出） 所有者判定用に userId を含む
 export type BookWithOwner = InferResponseType<(typeof client.api.books)[":id"]["$get"], 200>
+// GET /api/books/meのレスポンス1件分の型 所有者(userId)は含まない
+export type MyBook = InferResponseType<typeof client.api.books.me.$get>[number]
 // POST /api/books のJSONリクエストボディの型 BookAddのフォーム入力型として使う
 export type CreateBookInput = InferRequestType<typeof client.api.books.$post>["json"]
 // PUT /api/books/:id のJSONリクエストボディ型 BookEditフォームの入力型として使う
@@ -34,6 +36,15 @@ export const getBooks = async (): Promise<Book[]> => {
 export const getBook = async (id: string): Promise<BookWithOwner> => {
   const res = await client.api.books[":id"].$get({ param: { id } })
   if (!res.ok) throw new Error(`Failed to fetch books: ${res.status}`)
+  return res.json()
+}
+
+// 自分が登録した本を全件取得する
+// - 並び順: 更新日時の降順
+// - 失敗時: HTTPステータスを含む英文errorをthrow(dev用、UI表示はしない)
+export const getMyBooks = async (): Promise<MyBook[]> => {
+  const res = await client.api.books.me.$get()
+  if (!res.ok) throw new Error(`Failed to fetch my books: ${res.status}`)
   return res.json()
 }
 
