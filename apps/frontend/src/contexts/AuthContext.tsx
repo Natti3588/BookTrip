@@ -10,13 +10,17 @@
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react"
 import {
+  type DeleteAccountInput,
+  deleteAccount as deleteAccountApi,
   getMe,
   type LoginInput,
   login as loginApi,
   logout as logoutApi,
   type SignupInput,
   signup as signupApi,
+  type UpdateNameInput,
   type User,
+  updateName as updateNameApi,
 } from "../lib/auth"
 
 // Contextが公開する useAuthの戻り値型として使う
@@ -26,6 +30,8 @@ type AuthContextValue = {
   signup: (data: SignupInput) => Promise<void>
   login: (data: LoginInput) => Promise<void>
   logout: () => Promise<void>
+  updateName: (data: UpdateNameInput) => Promise<void>
+  deleteAccount: (data: DeleteAccountInput) => Promise<void>
 }
 
 // Contextの初期値が undefined なのは Providerの外でuseAuth が呼ばれたケースを検知するため
@@ -79,10 +85,26 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setCurrentUser(null)
   }, [])
 
+  // ユーザー名を変更する Profile のユーザー名変更フォームから呼ばれる
+  // - 成功時: 更新後の currentUser を反映
+  // - 失敗時は updateNameApi が throw するのでキャッチしない（UI表示させるため）
+  const updateName = useCallback(async (data: UpdateNameInput) => {
+    const user = await updateNameApi(data)
+    setCurrentUser(user)
+  }, [])
+
+  // アカウントを削除する DeleteAccountDialogから呼ばれる
+  // - 成功時: サーバー側で Cookie も消えるのでクライアント側も currentUser を null に
+  // - 失敗時は deleteAccountApi が throw するのでキャッチしない（UI表示させるため）
+  const deleteAccount = useCallback(async (data: DeleteAccountInput) => {
+    await deleteAccountApi(data)
+    setCurrentUser(null)
+  }, [])
+
   // Provider に渡す value を useMemo で参照安定化
   const value = useMemo(
-    () => ({ currentUser, isLoading, signup, login, logout }),
-    [currentUser, isLoading, signup, login, logout],
+    () => ({ currentUser, isLoading, signup, login, logout, updateName, deleteAccount }),
+    [currentUser, isLoading, signup, login, logout, updateName, deleteAccount],
   )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
