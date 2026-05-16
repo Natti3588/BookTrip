@@ -170,7 +170,7 @@ const Profile = () => {
         </form>
       </section>
 
-      {/* アカウント削除（最下部の危険操作） */}
+      {/* アカウント削除 */}
       <section className="bg-white rounded-lg shadow-sm p-6 border border-red-200">
         <h2 className="text-xl font-bold text-red-700 mb-4">アカウントの削除</h2>
         <p className="text-stone-700 mb-4 text-sm">

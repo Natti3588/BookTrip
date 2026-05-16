@@ -8,6 +8,11 @@ import PasswordInput from "../components/PasswordInput"
 import { useAuth } from "../contexts/AuthContext"
 import type { SignupInput } from "../lib/auth"
 
+// 新規登録画面
+// - 名前 / メール / パスワード / 確認パスワードを入力
+// - react-hook-form + zodResolver でバリデーション（バックエンドの signupSchema を直接 import）
+// - 成功時: AuthContext.signup で currentUser を更新し /home に遷移
+// - 失敗時: serverError にメッセージを set してフォーム下に表示
 const SignupPage = () => {
   const navigate = useNavigate()
   const { signup } = useAuth()
@@ -27,6 +32,9 @@ const SignupPage = () => {
     },
   })
 
+  // フォーム送信時の処理
+  // - 成功時: /home に遷移
+  // - 失敗時: serverError にメッセージを set（バックエンドの日本語エラー、または fallback）
   const onSubmit = async (data: SignupInput) => {
     setServerError(null)
     try {
