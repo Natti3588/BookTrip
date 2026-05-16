@@ -1,11 +1,11 @@
-import { BookOpen, Home, Library, LogOut, Plus } from "lucide-react"
+import { BookOpen, Home, Library, Plus } from "lucide-react"
 import { Link, NavLink, Outlet, useLocation } from "react-router"
 import { useAuth } from "../contexts/AuthContext"
-import UserMenu from "./UserMenu"
 import GuestMenu from "./GuestMenu"
+import UserMenu from "./UserMenu"
 
 const navLinkClass = ({ isActive }: { isActive: boolean }) =>
-  `flex items-center space-x-1 px-3 py-2 rounded-md transition-colors ${
+  `flex items-center space-x-1 px-1.5 sm:px-3 py-2 rounded-md transition-colors ${
     isActive ? "bg-amber-100 text-amber-800" : "text-stone-700 hover:bg-stone-100"
   }`
 
@@ -23,30 +23,26 @@ const Layout = () => {
               <span className="text-2xl font-bold text-stone-800">Book Trip</span>
             </Link>
 
-            <nav className="flex items-center space-x-4">
+            <nav className="flex items-center space-x-3 sm:space-x-4">
               <NavLink to="/home" end className={navLinkClass}>
                 <Home className="w-5 h-5" />
-                <span>ホーム</span>
+                <span className="hidden sm:inline">ホーム</span>
               </NavLink>
 
               <NavLink to="/books" end className={navLinkClass}>
                 <Library className="w-5 h-5" />
-                <span>本の一覧</span>
+                <span className="hidden sm:inline">本の一覧</span>
               </NavLink>
 
               {currentUser && (
                 <NavLink to="/books/add" end className={navLinkClass}>
                   <Plus className="w-5 h-5" />
-                  <span>本を追加</span>
+                  <span className="hidden sm:inline">本を追加</span>
                 </NavLink>
               )}
 
-              <div className="flex items-center space-x-3 ml-4 pl-4 border-l border-stone-200">
-                {currentUser ? (
-                  <UserMenu />
-                ) : (
-                  <GuestMenu />
-                )}
+              <div className="flex items-center space-x-3 pl-2 sm:pl-4 border-l border-stone-200">
+                {currentUser ? <UserMenu /> : <GuestMenu />}
               </div>
             </nav>
           </div>
