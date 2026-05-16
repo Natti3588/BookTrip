@@ -14,7 +14,13 @@ import { Hono } from "hono"
 import { deleteCookie, getCookie, setCookie } from "hono/cookie"
 import { createSession, deleteSession, hashPassword, verifyPassword } from "../lib/auth.js"
 import { authMiddleware } from "../middleware/auth.js"
-import { loginSchema, signupSchema } from "../schemas/auth.js"
+import {
+  deleteAccountSchema,
+  loginSchema,
+  signupSchema,
+  updateNameSchema,
+  updatePasswordSchema,
+} from "../schemas/auth.js"
 
 const app = new Hono()
 
@@ -114,6 +120,74 @@ const routes = app
     }
 
     return c.json({ id: user.id, email: user.email, name: user.name }, 200)
+  })
+
+  // ユーザー名を変更する Profileのユーザー名変更フォームから呼ばれる
+  // - 認証必須
+  // - レスポンスは getMe と同形式で id / email / name のみ
+  .patch("/me", authMiddleware, zValidator("json", updateNameSchema), async (c) => {
+    const userId = c.get("userId")
+    const { name } = c.req.valid("json")
+
+    const user = await prisma.user.update({
+      where: { id: userId },
+      data: { name },
+      select: { id: true, email: true, name: true },
+    })
+
+    return c.json(user, 200)
+  })
+
+  // パスワードを変更する Profileのパスワード変更フォームから呼ばれる
+  // - 認証必須 + 現在のパスワード照合
+  // - 成功時は 204 No Content
+  // - 現在のパスワードが違う場合は 401
+  .put("/me/password", authMiddleware, zValidator("json", updatePasswordSchema), async (c) => {
+    const userId = c.get("userId")
+    const { currentPassword, newPassword } = c.req.valid("json")
+
+    const user = await prisma.user.findUnique({ where: { id: userId } })
+    if (!user) {
+      return c.json({ error: "ユーザーが見つかりません" }, 401)
+    }
+
+    const ok = await verifyPassword(currentPassword, user.passwordHash)
+    if (!ok) {
+      return c.json({ error: "現在のパスワードが違います" }, 401)
+    }
+
+    const passwordHash = await hashPassword(newPassword)
+    await prisma.user.update({
+      where: { id: userId },
+      data: { passwordHash },
+    })
+
+    return c.body(null, 204)
+  })
+
+  // アカウントを削除する DeleteAccountDialogから呼ばれる
+  // - 認証必須 + パスワード再確認
+  // - Book / Session は Prisma の onDelete: Cascade で自動削除
+  // - 成功時はクライアント側のCookieも消して 204
+  // - パスワードが違う場合は 401
+  .delete("/me", authMiddleware, zValidator("json", deleteAccountSchema), async (c) => {
+    const userId = c.get("userId")
+    const { password } = c.req.valid("json")
+
+    const user = await prisma.user.findUnique({ where: { id: userId } })
+    if (!user) {
+      return c.json({ error: "ユーザーが見つかりません" }, 401)
+    }
+
+    const ok = await verifyPassword(password, user.passwordHash)
+    if (!ok) {
+      return c.json({ error: "パスワードが違います" }, 401)
+    }
+
+    await prisma.user.delete({ where: { id: userId } })
+    deleteCookie(c, "session", { path: "/" })
+
+    return c.body(null, 204)
   })
 
 export default routes
