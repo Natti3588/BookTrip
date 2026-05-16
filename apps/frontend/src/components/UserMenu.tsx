@@ -1,4 +1,4 @@
-import { ChevronDown, LogOut, User, BookHeart } from "lucide-react"
+import { BookHeart, ChevronDown, LogOut, User } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import { Link } from "react-router"
 import { useAuth } from "../contexts/AuthContext"
@@ -67,7 +67,8 @@ const UserMenu = () => {
             to="/my-books"
             onClick={() => setIsOpen(false)}
             className="flex items-center space-x-2 px-4 py-2 text-stone-700 hover:bg-stone-100 transition-colors"
-            role="menuitem">
+            role="menuitem"
+          >
             <BookHeart className="w-4 h-4" />
             <span>自分の本一覧</span>
           </Link>
