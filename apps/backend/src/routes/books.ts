@@ -42,7 +42,7 @@ const routes = app
 
   // 自分の投稿した本一覧を返す（ログイン必須）
   // - 認証ミドルウェアで設定したuserIdで絞り込み
-  // - userIdは自分の本だとわかりきって言るため除外
+  // - userIdは自分の本だとわかりきって言るためselectから除外
   .get("/me", authMiddleware, async (c) => {
     const userId = c.get("userId")
     const books = await prisma.book.findMany({
