@@ -1,9 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { loginSchema } from "@myapp/backend/src/schemas/auth"
-import { BookOpen, Eye, EyeOff } from "lucide-react"
+import { BookOpen } from "lucide-react"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { Link, useNavigate } from "react-router"
+import PasswordInput from "../components/PasswordInput"
 import { useAuth } from "../contexts/AuthContext"
 import type { LoginInput } from "../lib/auth"
 
@@ -11,7 +12,6 @@ const LoginPage = () => {
   const navigate = useNavigate()
   const { login } = useAuth()
   const [serverError, setServerError] = useState<string | null>(null)
-  const [showPassword, setShowPassword] = useState(false)
 
   const {
     register,
@@ -58,33 +58,13 @@ const LoginPage = () => {
             {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>}
           </div>
 
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium text-stone-700 mb-1">
-              パスワード
-            </label>
-            <div className="relative">
-              <input
-                type={showPassword ? "text" : "password"}
-                id="password"
-                autoComplete="current-password"
-                {...register("password")}
-                className="w-full px-3 py-2 border border-stone-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white pr-10"
-              />
-              <button
-                type="button"
-                tabIndex={-1}
-                onClick={() => setShowPassword((prev) => !prev)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-500 hover:text-stone-700"
-                aria-label={showPassword ? "パスワードを隠す" : "パスワードを表示"}
-              >
-                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-              </button>
-            </div>
-
-            {errors.password && (
-              <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>
-            )}
-          </div>
+          <PasswordInput
+            id="password"
+            label="パスワード"
+            autoComplete="current-password"
+            error={errors.password?.message}
+            registration={register("password")}
+          />
 
           {serverError && (
             <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md mb-6">
