@@ -45,7 +45,7 @@ const UserMenu = () => {
         aria-haspopup="menu"
         aria-expanded={isOpen}
       >
-        <span className="text-sm">{currentUser.name}</span>
+        <span className="text-sm hidden sm:inline">{currentUser.name}</span>
         <ChevronDown className={`w-4 h-4 transition-transform ${isOpen ? "rotate-180" : ""}`} />
       </button>
 
