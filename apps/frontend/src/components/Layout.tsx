@@ -25,18 +25,18 @@ const Layout = () => {
 
             <nav className="flex items-center space-x-3 sm:space-x-4">
               <NavLink to="/home" end className={navLinkClass}>
-                <Home className="w-5 h-5" />
+                <Home className="w-5 h-5 mr-0" />
                 <span className="hidden sm:inline">ホーム</span>
               </NavLink>
 
               <NavLink to="/books" end className={navLinkClass}>
-                <Library className="w-5 h-5" />
+                <Library className="w-5 h-5 mr-0" />
                 <span className="hidden sm:inline">本の一覧</span>
               </NavLink>
 
               {currentUser && (
                 <NavLink to="/books/add" end className={navLinkClass}>
-                  <Plus className="w-5 h-5" />
+                  <Plus className="w-5 h-5 mr-0" />
                   <span className="hidden sm:inline">本を追加</span>
                 </NavLink>
               )}
