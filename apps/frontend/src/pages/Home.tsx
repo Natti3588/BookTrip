@@ -1,23 +1,31 @@
+import { useQuery } from "@tanstack/react-query"
 import { Star } from "lucide-react"
-import { useEffect, useState } from "react"
 import { SiGithub } from "react-icons/si"
 import { Link } from "react-router"
 import { useAuth } from "../contexts/AuthContext"
-import { type Book, getBooks } from "../lib/books"
+import { getBooks } from "../lib/books"
 
 const Home = () => {
-  const [books, setBooks] = useState<Book[]>([])
   const { currentUser } = useAuth()
   const GITHUB_URL = "https://github.com/Natti3588"
 
-  // レンダリング時に本のデータを取得
-  useEffect(() => {
-    getBooks()
-      .then((data) => setBooks(data))
-      .catch((err: Error) => console.error("本の取得に失敗しました", err))
-  }, [])
+  const {
+    data: books = [],
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["books"],
+    queryFn: getBooks,
+  })
 
-  // おすすめの本（最新の6冊をおすすめとして表示）
+  if (isLoading) return <p className="text-center py-12 text-stone-600">読み込み中...</p>
+  if (isError) {
+    console.error(error)
+    return <p className="text-red-600">読み込みに失敗しました</p>
+  }
+
+  // おすすめの本 （データベースからLIMITで取得する本を絞る予定）
   const recommendedBooks = books.slice(0, 6)
 
   return (
