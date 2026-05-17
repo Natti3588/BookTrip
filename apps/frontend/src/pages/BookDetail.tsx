@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query"
+import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { ArrowLeft, Calendar, Edit2, Star, Tag, Trash2, User } from "lucide-react"
 import { useState } from "react"
 import { Link, useNavigate, useParams } from "react-router"
@@ -14,6 +14,7 @@ const BookDetail = () => {
   const { id } = useParams<{ id: string }>()
   const { currentUser } = useAuth()
   const navigate = useNavigate()
+  const queryClient = useQueryClient()
 
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
@@ -38,6 +39,7 @@ const BookDetail = () => {
 
     try {
       await deleteBook(id)
+      queryClient.invalidateQueries({ queryKey: ["books"] })
       navigate("/books?deleted=true")
     } catch (err) {
       console.error("本の削除に失敗しました", err)

@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { GENRES, updateBookSchema } from "@myapp/backend/src/schemas/book"
-import { useQuery } from "@tanstack/react-query"
+import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { ArrowLeft } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
@@ -13,6 +13,8 @@ const FALLBACK_IMAGE = "https://placehold.co/300x450?text=No+Image"
 const BookEdit = () => {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
+  const queryClient = useQueryClient()
+
   const [serverError, setServerError] = useState<string | null>(null)
 
   // useFormでフォームを定義
@@ -59,6 +61,7 @@ const BookEdit = () => {
     setServerError(null)
     try {
       await updateBook(id, data)
+      queryClient.invalidateQueries({ queryKey: ["books"] })
       navigate(`/books/${id}`)
     } catch (err) {
       setServerError(err instanceof Error ? err.message : "更新に失敗しました")

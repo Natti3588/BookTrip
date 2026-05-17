@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { createBookSchema, GENRES } from "@myapp/backend/src/schemas/book"
+import { useQueryClient } from "@tanstack/react-query"
 import { ArrowLeft } from "lucide-react"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
@@ -10,6 +11,7 @@ const FALLBACK_IMAGE = "https://placehold.co/300x450?text=No+Image"
 
 const BookAdd = () => {
   const navigate = useNavigate()
+  const queryClient = useQueryClient()
   const [serverError, setServerError] = useState<string | null>(null)
 
   const {
@@ -32,6 +34,7 @@ const BookAdd = () => {
     setServerError(null)
     try {
       await createBook(data)
+      queryClient.invalidateQueries({ queryKey: ["books"] })
       navigate("/books?added=true")
     } catch (err) {
       setServerError(err instanceof Error ? err.message : "追加に失敗しました")
