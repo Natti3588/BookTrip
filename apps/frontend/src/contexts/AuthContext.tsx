@@ -1,8 +1,6 @@
 /**
  * 認証状態をアプリ全体に渡す React Context
- * - currentuser: 現在のログインユーザー（未ログインは null）
- * - isLoading: 初回マウント時の getMeが終わるまで true
- *  -> 認証チェックが完了前にログイン画面を出さないため
+ * - currentUser: 現在のログインユーザー（未ログインは null）
  * - signup / login / logout: APIを叩いて currentUserにセットする
  *
  * useAuth は AuthProvider 配下のコンポーネントからのみ呼べる
@@ -26,7 +24,6 @@ import {
 // Contextが公開する useAuthの戻り値型として使う
 type AuthContextValue = {
   currentUser: User | null
-  isLoading: boolean
   signup: (data: SignupInput) => Promise<void>
   login: (data: LoginInput) => Promise<void>
   logout: () => Promise<void>
@@ -43,7 +40,6 @@ const AuthContext = createContext<AuthContextValue | undefined>(undefined)
 // - logout: サーバー結果にかかわらずクライアント側の状態を破棄
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
 
   // 初回マウント時に1回だけ実行
   // - getMe は401をnullで返す
@@ -57,7 +53,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         console.error(`Failed to fetch current user:`, err)
         setCurrentUser(null)
       })
-      .finally(() => setIsLoading(false))
   }, [])
 
   // 新規登録 SignupFormの送信時に呼ばれる
@@ -102,8 +97,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   // Provider に渡す value を useMemo で参照安定化
   const value = useMemo(
-    () => ({ currentUser, isLoading, signup, login, logout, updateName, deleteAccount }),
-    [currentUser, isLoading, signup, login, logout, updateName, deleteAccount],
+    () => ({ currentUser, signup, login, logout, updateName, deleteAccount }),
+    [currentUser, signup, login, logout, updateName, deleteAccount],
   )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
