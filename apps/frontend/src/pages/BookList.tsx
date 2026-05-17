@@ -1,13 +1,39 @@
 import { useQuery } from "@tanstack/react-query"
 import { BookOpen, Calendar, Star, User } from "lucide-react"
 import { useState } from "react"
-import { Link } from "react-router"
+import { Link, useSearchParams } from "react-router"
+import Toast from "../components/Toast"
 import { useAuth } from "../contexts/AuthContext"
 import { getBooks } from "../lib/books"
 
 const BookList = () => {
   const { currentUser } = useAuth()
   const [searchTerm, setSearchTerm] = useState("")
+  const [searchParams, setSearchParams] = useSearchParams()
+  const showAddedToast = searchParams.get("added") === "true"
+  const showDeletedToast = searchParams.get("deleted") === "true"
+
+  // Toastを閉じたとき、URLから added を削除する関数 (これがないと、リロードしてもずっとトーストが表示される)
+  const clearAddedParam = () => {
+    setSearchParams(
+      (prev) => {
+        prev.delete("added")
+        return prev
+      },
+      { replace: true },
+    )
+  }
+
+  // Toastを閉じたとき、URLから deleted を削除する関数（理由は clearAddedParam と同じ）
+  const clearDeletedParam = () => {
+    setSearchParams(
+      (prev) => {
+        prev.delete("deleted")
+        return prev
+      },
+      { replace: true },
+    )
+  }
 
   const {
     data: books = [],
@@ -36,6 +62,8 @@ const BookList = () => {
 
   return (
     <div>
+      {showAddedToast && <Toast message="本を追加しました" onClose={clearAddedParam} />}
+      {showDeletedToast && <Toast message="本を削除しました" onClose={clearDeletedParam} />}
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-stone-800 mb-4">本の一覧</h1>
         <input
