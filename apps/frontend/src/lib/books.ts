@@ -4,7 +4,7 @@
  * - 型は Hono RPC Clientから自動推論
  * - read系（getBooks / getBook）は失敗時に英文Error（dev向け、 console用）
  * - mutation系（create / update / delete）は失敗時に日本語Error（UI表示用）
- *   バックエンドが返す{ error: "日本語" }を尊重するが、なければfallbackを使う
+ *   バックエンドが返す日本語のエラーを尊重するが、なければfallbackを使う
  */
 
 import { extractError } from "@myapp/utils"

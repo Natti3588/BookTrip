@@ -43,7 +43,6 @@ const AuthContext = createContext<AuthContextValue | undefined>(undefined)
 // - logout: サーバー結果にかかわらずクライアント側の状態を破棄
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null)
-  // 小コンポーネントで「認証チェック完了化」を判断するためのstate
   const [isLoading, setIsLoading] = useState(true)
 
   // 初回マウント時に1回だけ実行
@@ -111,7 +110,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 }
 
 // 認証Context を読むカスタムフック
-// - AuthProvider意外で使うとthrow
+// - AuthProvider以外で使うと throw
 export const useAuth = () => {
   const ctx = useContext(AuthContext)
   if (!ctx) throw new Error("useAuthはAuthProvider内で使用する必要があります")

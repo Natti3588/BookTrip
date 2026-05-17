@@ -3,7 +3,7 @@
  *
  * - 型は Hono RPC Client から自動推論
  * - 失敗時はすべて日本語の error を throw（UI表示のため）
- *   バックエンドが返す { error: "日本語" }を尊重するが、なければfallbackを使う
+ *   バックエンドが返す日本語のエラーを尊重するが、なければfallbackを使う
  * - getMeのみ例外的に「未ログイン状態をnull」で表現（ログイン状態を確認する目的のため）
  */
 
@@ -11,17 +11,19 @@ import { extractError } from "@myapp/utils"
 import type { InferRequestType, InferResponseType } from "hono"
 import { client } from "../api/rpc"
 
-// POST /api/auth/signup のリクエストボディ型 Signup の入力型として使う
-export type SignupInput = InferRequestType<typeof client.api.auth.signup.$post>["json"]
-// POST /api/auth/login のリクエストボディ型 login の入力型として使う
-export type LoginInput = InferRequestType<typeof client.api.auth.login.$post>["json"]
-// POST /api/auth/signup の成功時（201）のレスポンス型 AuthContextで currentUserとして保持
+// 型を Hono RPC Client から自動推論
+
+// API ラッパーの返り値用
 export type User = InferResponseType<typeof client.api.auth.signup.$post, 201>
-// PATCH /api/auth/me のリクエストボディ型 Profile の名前変更フォームから使う
+// ユーザー登録用
+export type SignupInput = InferRequestType<typeof client.api.auth.signup.$post>["json"]
+// ユーザーログイン用
+export type LoginInput = InferRequestType<typeof client.api.auth.login.$post>["json"]
+// ユーザー名更新用
 export type UpdateNameInput = InferRequestType<typeof client.api.auth.me.$patch>["json"]
-// PUT /api/auth/me/password のリクエストボディ型 Profile のパスワード変更フォームから使う
+// ユーザーパスワード更新用
 export type UpdatePasswordInput = InferRequestType<typeof client.api.auth.me.password.$put>["json"]
-// DELETE /api/auth/me のリクエストボディ型 DeleteAccountDialog から使う
+// ユーザーアカウント削除用
 export type DeleteAccountInput = InferRequestType<typeof client.api.auth.me.$delete>["json"]
 
 // 新規登録する　Signupの送信時に呼ばれる
@@ -46,7 +48,7 @@ export const login = async (data: LoginInput): Promise<User> => {
 
 // ログアウトする　Headerのログアウトボタンから呼ばれる
 // - 成功時: バックエンドがセッションCookie を削除
-// - 失敗時: バックエンドのの本後エラー、またはfallback を throw
+// - 失敗時: バックエンドのの日本後エラー、またはfallback を throw
 export const logout = async (): Promise<void> => {
   const res = await client.api.auth.logout.$post()
 

@@ -29,6 +29,5 @@ export const authMiddleware = createMiddleware<{ Variables: AuthVariables }>(asy
 
   // 後続ハンドラへ userId を渡す
   c.set("userId", session.userId)
-
   await next()
 })
