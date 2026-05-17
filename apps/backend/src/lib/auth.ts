@@ -1,12 +1,11 @@
 import { prisma } from "@myapp/db"
 import bcrypt from "bcrypt"
 
-const SESSION_DURATION_MS = 7 * 24 * 60 * 60 * 1000 // ７日
+const SESSION_DURATION_MS = 7 * 24 * 60 * 60 * 1000 // 7日
 
 export const hashPassword = (plain: string) => bcrypt.hash(plain, 10)
 
-// タイミング攻撃（システムや暗号アルゴリズムの処理時間を推測してパスワードを盗む手法）
-// の対策としてタイミング攻撃対策付きのcompare()メソッドを使う。
+// bcrypt.compare はパスワードのハッシュと平文を比較する標準的な関数（タイミング攻撃を回避できる）
 export const verifyPassword = (plain: string, hash: string) => bcrypt.compare(plain, hash)
 
 export const createSession = async (userId: string) => {
@@ -27,7 +26,7 @@ export const validateSession = async (sessionId: string) => {
   // データを取得できなかった場合はnullを返す
   if (!session) return null
 
-  // セッション有効期限が過ぎていればば、Sessionテーブルからレコードを削除してnullを返す
+  // セッション有効期限が過ぎていれば、Sessionテーブルからレコードを削除してnullを返す
   if (session.expiresAt < new Date()) {
     await prisma.session.deleteMany({ where: { id: sessionId } })
     return null
