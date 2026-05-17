@@ -21,7 +21,7 @@ export type BookWithOwner = InferResponseType<(typeof client.api.books)[":id"]["
 export type MyBook = InferResponseType<typeof client.api.books.me.$get>[number]
 // 新規登録のフォーム入力用
 export type CreateBookInput = InferRequestType<typeof client.api.books.$post>["json"]
-// 編集んおフォーム入力用
+// 編集のフォーム入力用
 export type UpdateBookInput = InferRequestType<(typeof client.api.books)[":id"]["$put"]>["json"]
 
 // 本の一覧をサーバーから取得する
