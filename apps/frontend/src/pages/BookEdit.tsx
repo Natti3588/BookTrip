@@ -1,22 +1,21 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { GENRES, updateBookSchema } from "@myapp/backend/src/schemas/book"
+import { useQuery } from "@tanstack/react-query"
 import { ArrowLeft } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { Link, useNavigate, useParams } from "react-router"
 import NotFoundView from "../components/NotFoundView"
-import { type Book, getBook, type UpdateBookInput, updateBook } from "../lib/books"
+import { getBook, type UpdateBookInput, updateBook } from "../lib/books"
 
 const FALLBACK_IMAGE = "https://placehold.co/300x450?text=No+Image"
 
 const BookEdit = () => {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
-
-  const [book, setBook] = useState<Book | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
   const [serverError, setServerError] = useState<string | null>(null)
 
+  // useFormでフォームを定義
   const {
     register,
     handleSubmit,
@@ -27,26 +26,33 @@ const BookEdit = () => {
     resolver: zodResolver(updateBookSchema),
   })
 
-  useEffect(() => {
-    if (!id) return
+  // useQuery でデータ(book)を取得
+  const {
+    data: book,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["books", id],
+    queryFn: () => {
+      if (!id) throw new Error("IDは必要です") // TypeScriptの型ナローイングのために throw
+      return getBook(id)
+    },
+    enabled: !!id,
+  })
 
-    setIsLoading(true)
-    getBook(id)
-      .then((data) => {
-        setBook(data)
-        reset({
-          title: data.title,
-          author: data.author,
-          genre: data.genre as UpdateBookInput["genre"],
-          publishedYear: data.publishedYear,
-          coverImage: data.coverImage,
-          description: data.description,
-          rating: data.rating ?? undefined,
-        })
-      })
-      .catch((err: Error) => console.error("本の取得に失敗しました", err))
-      .finally(() => setIsLoading(false))
-  }, [id, reset])
+  // bookが取れたら Formを初期化
+  useEffect(() => {
+    if (!book) return
+    reset({
+      title: book.title,
+      author: book.author,
+      genre: book.genre as UpdateBookInput["genre"],
+      publishedYear: book.publishedYear,
+      coverImage: book.coverImage,
+      description: book.description,
+      rating: book.rating ?? undefined,
+    })
+  }, [book, reset])
 
   const onSubmit = async (data: UpdateBookInput) => {
     if (!id) return
@@ -62,7 +68,7 @@ const BookEdit = () => {
   const coverImage = watch("coverImage")
 
   if (isLoading) return <p className="text-center py-12 text-stone-600">読み込み中...</p>
-  if (!book) return <NotFoundView />
+  if (isError || !book) return <NotFoundView />
 
   return (
     <div className="max-w-2xl mx-auto">
