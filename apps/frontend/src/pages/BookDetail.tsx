@@ -1,11 +1,12 @@
+import { useQuery } from "@tanstack/react-query"
 import { ArrowLeft, Calendar, Edit2, Star, Tag, Trash2, User } from "lucide-react"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { Link, useNavigate, useParams } from "react-router"
 import DeleteConfirmDialog from "../components/DeleteConfirmDialog"
 import NotFoundView from "../components/NotFoundView"
 import Rating from "../components/Rating"
 import { useAuth } from "../contexts/AuthContext"
-import { type BookWithOwner, deleteBook, getBook } from "../lib/books"
+import { deleteBook, getBook } from "../lib/books"
 
 const FALLBACK_IMAGE = "https://placehold.co/300x450?text=No+Image"
 
@@ -14,20 +15,22 @@ const BookDetail = () => {
   const { currentUser } = useAuth()
   const navigate = useNavigate()
 
-  const [book, setBook] = useState<BookWithOwner | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
 
-  useEffect(() => {
-    if (!id) return
-
-    setIsLoading(true)
-    getBook(id)
-      .then((data) => setBook(data))
-      .catch((err: Error) => console.error("本の取得に失敗しました", err))
-      .finally(() => setIsLoading(false))
-  }, [id])
+  const {
+    data: book,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["books", id],
+    queryFn: () => {
+      if (!id) throw new Error("IDは必要です") // TypeScriptの型ナローイングのために throw
+      return getBook(id)
+    },
+    enabled: !!id,
+  })
 
   const handleDelete = async () => {
     if (!id) return
@@ -44,7 +47,10 @@ const BookDetail = () => {
   }
 
   if (isLoading) return <p className="text-center py-12 text-stone-600">読み込み中...</p>
-  if (!book) return <NotFoundView />
+  if (isError || !book) {
+    console.error(error)
+    return <NotFoundView />
+  }
 
   const isUpdated = book.updatedAt !== book.createdAt
   const dateLabel = isUpdated ? "最終更新日" : "登録日"

@@ -1,19 +1,23 @@
+import { useQuery } from "@tanstack/react-query"
 import { BookOpen, Calendar, Star, User } from "lucide-react"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { Link } from "react-router"
 import { useAuth } from "../contexts/AuthContext"
-import { getMyBooks, type MyBook } from "../lib/books"
+import { getMyBooks } from "../lib/books"
 
 const MyBooks = () => {
   const { currentUser } = useAuth()
-  const [books, setBooks] = useState<MyBook[]>([])
   const [searchTerm, setSearchTerm] = useState("")
 
-  useEffect(() => {
-    getMyBooks()
-      .then((data) => setBooks(data))
-      .catch((err: Error) => console.error("自分の本取得に失敗しました", err))
-  }, [])
+  const {
+    data: books = [],
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["books", "me"],
+    queryFn: getMyBooks,
+  })
 
   const term = searchTerm.toLowerCase()
   const filteredBooks = books.filter((book) => {
@@ -23,6 +27,12 @@ const MyBooks = () => {
       book.genre.toLowerCase().includes(term)
     )
   })
+
+  if (isLoading) return <p className="text-stone-600">読み込み中...</p>
+  if (isError) {
+    console.error(error)
+    return <p className="text-red-600">本の取得に失敗しました</p>
+  }
 
   return (
     <div>
