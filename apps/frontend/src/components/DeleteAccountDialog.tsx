@@ -1,3 +1,4 @@
+import { Eye, EyeOff } from "lucide-react"
 import { useState } from "react"
 
 type Props = {
@@ -9,16 +10,16 @@ type Props = {
 }
 
 // アカウント削除の確認ダイアログ
-// - 既存の DeleteConfirmDialog はアイテム名で確認するだけだが、
-//   こちらは敏感操作なのでパスワード再入力を要求する
-// - errorMessage は API 失敗時のメッセージ表示用（パスワード不一致など）
+// - errorMessage は API 失敗時のメッセージ表示用
 const DeleteAccountDialog = ({ isOpen, isDeleting, errorMessage, onConfirm, onCancel }: Props) => {
   const [password, setPassword] = useState("")
+  const [showPassword, setShowPassword] = useState(false)
 
   if (!isOpen) return null
 
   const handleCancel = () => {
     setPassword("")
+    setShowPassword(false)
     onCancel()
   }
 
@@ -32,15 +33,27 @@ const DeleteAccountDialog = ({ isOpen, isDeleting, errorMessage, onConfirm, onCa
         <label htmlFor="delete-account-password" className="block text-sm text-stone-700 mb-1">
           続行するにはパスワードを入力してください
         </label>
-        <input
-          id="delete-account-password"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          disabled={isDeleting}
-          className="w-full px-3 py-2 border border-stone-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
-          placeholder="パスワード"
-        />
+        <div className="relative">
+          <input
+            id="delete-account-password"
+            type={showPassword ? "text" : "password"}
+            autoComplete="current-password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            disabled={isDeleting}
+            className="w-full px-3 py-2 pr-10 border border-stone-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            placeholder="パスワード"
+          />
+          <button
+            type="button"
+            tabIndex={-1}
+            onClick={() => setShowPassword((prev) => !prev)}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-500 hover:text-stone-700"
+            aria-label={showPassword ? "パスワードを隠す" : "パスワードを表示"}
+          >
+            {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+          </button>
+        </div>
         {errorMessage && <p className="text-sm text-red-600 mt-2">{errorMessage}</p>}
         <div className="flex justify-end gap-2 mt-6">
           <button

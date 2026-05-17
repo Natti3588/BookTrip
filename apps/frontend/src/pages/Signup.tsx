@@ -1,18 +1,22 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { signupSchema } from "@myapp/backend/src/schemas/auth"
-import { BookOpen, Eye, EyeOff } from "lucide-react"
+import { BookOpen } from "lucide-react"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { Link, useNavigate } from "react-router"
+import PasswordInput from "../components/PasswordInput"
 import { useAuth } from "../contexts/AuthContext"
 import type { SignupInput } from "../lib/auth"
 
+// 新規登録画面
+// - 名前 / メール / パスワード / 確認パスワードを入力
+// - react-hook-form + zodResolver でバリデーション（バックエンドの signupSchema を直接 import）
+// - 成功時: AuthContext.signup で currentUser を更新し /home に遷移
+// - 失敗時: serverError にメッセージを set してフォーム下に表示
 const SignupPage = () => {
   const navigate = useNavigate()
   const { signup } = useAuth()
   const [serverError, setServerError] = useState<string | null>(null)
-  const [showPassword, setShowPassword] = useState(false)
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
   const {
     register,
@@ -28,6 +32,9 @@ const SignupPage = () => {
     },
   })
 
+  // フォーム送信時の処理
+  // - 成功時: /home に遷移
+  // - 失敗時: serverError にメッセージを set（バックエンドの日本語エラー、または fallback）
   const onSubmit = async (data: SignupInput) => {
     setServerError(null)
     try {
@@ -75,62 +82,21 @@ const SignupPage = () => {
             {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>}
           </div>
 
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium text-stone-700 mb-1">
-              パスワード
-            </label>
-            <div className="relative">
-              <input
-                type={showPassword ? "text" : "password"}
-                id="password"
-                autoComplete="new-password"
-                {...register("password")}
-                className="w-full px-3 py-2 pr-10 border border-stone-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white"
-              />
-              <button
-                type="button"
-                tabIndex={-1}
-                onClick={() => setShowPassword((prev) => !prev)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-500 hover:text-stone-700"
-                aria-label={showPassword ? "パスワードを隠す" : "パスワードを表示"}
-              >
-                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-              </button>
-            </div>
-            {errors.password && (
-              <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>
-            )}
-          </div>
+          <PasswordInput
+            id="password"
+            label="パスワード"
+            autoComplete="new-password"
+            error={errors.password?.message}
+            registration={register("password")}
+          />
 
-          <div>
-            <label
-              htmlFor="confirmPassword"
-              className="block text-sm font-medium text-stone-700 mb-1"
-            >
-              パスワード（確認）
-            </label>
-            <div className="relative">
-              <input
-                type={showConfirmPassword ? "text" : "password"}
-                id="confirmPassword"
-                autoComplete="new-password"
-                {...register("confirmPassword")}
-                className="w-full px-3 py-2 pr-10 border border-stone-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white"
-              />
-              <button
-                type="button"
-                tabIndex={-1}
-                onClick={() => setShowConfirmPassword((prev) => !prev)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-500 hover:text-stone-700"
-                aria-label={showConfirmPassword ? "パスワードを隠す" : "パスワードを表示"}
-              >
-                {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-              </button>
-            </div>
-            {errors.confirmPassword && (
-              <p className="mt-1 text-sm text-red-600">{errors.confirmPassword.message}</p>
-            )}
-          </div>
+          <PasswordInput
+            id="confirmPassword"
+            label="パスワード（確認）"
+            autoComplete="new-password"
+            error={errors.confirmPassword?.message}
+            registration={register("confirmPassword")}
+          />
 
           {serverError && (
             <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md mb-6">
