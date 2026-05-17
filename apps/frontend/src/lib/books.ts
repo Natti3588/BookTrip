@@ -11,15 +11,17 @@ import { extractError } from "@myapp/utils"
 import type { InferRequestType, InferResponseType } from "hono"
 import { client } from "../api/rpc"
 
-// GET /api/books（一覧）のレスポンス1件分の型 所有者(userId)は含まない
+// 型を Hono RPC Client から自動推論
+
+// 一覧用 （所有者情報はなし）
 export type Book = InferResponseType<typeof client.api.books.$get>[number]
-// GET /api/books/:id のレスポンス型（200 のみ抽出） 所有者判定用に userId を含む
+// 詳細用 （所有者情報あり）
 export type BookWithOwner = InferResponseType<(typeof client.api.books)[":id"]["$get"], 200>
-// GET /api/books/meのレスポンス1件分の型 所有者(userId)は含まない
+// 自分の本一覧用
 export type MyBook = InferResponseType<typeof client.api.books.me.$get>[number]
-// POST /api/books のJSONリクエストボディの型 BookAddのフォーム入力型として使う
+// 新規登録のフォーム入力用
 export type CreateBookInput = InferRequestType<typeof client.api.books.$post>["json"]
-// PUT /api/books/:id のJSONリクエストボディ型 BookEditフォームの入力型として使う
+// 編集んおフォーム入力用
 export type UpdateBookInput = InferRequestType<(typeof client.api.books)[":id"]["$put"]>["json"]
 
 // 本の一覧をサーバーから取得する
