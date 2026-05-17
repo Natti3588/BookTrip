@@ -11,8 +11,6 @@ import { createMiddleware } from "hono/factory"
 import { validateSession } from "../lib/auth.js"
 
 // Hono の Context に「userId: string」を追加するための型
-// - export しているのは、ルート定義側で同じ型を使って c.get("userId") を型安全にするため
-// - createMiddleware のジェネリクスに渡すことで c.set / c.get が string 型に絞られる
 export type AuthVariables = {
   userId: string
 }
@@ -29,6 +27,5 @@ export const authMiddleware = createMiddleware<{ Variables: AuthVariables }>(asy
 
   // 後続ハンドラへ userId を渡す
   c.set("userId", session.userId)
-
   await next()
 })

@@ -4,8 +4,8 @@
  * - GET （一覧 / 詳細）: 未ログインでも閲覧可
  * - POST / PUT / DELETE: AuthMiddlewareでログイン必須　＋　自分の本のみ操作可
  * - 所有者チェックは where: { id: userId }で実現
- * - updateMany / deleteMany を使うのは「存在しない」と「他人の本」を　count === 0
- * 　で同じ404にまとめるため
+ * - updateMany / deleteMany を使うのは「存在しない」と「他人の本」を
+ * 　count === 0 で同じ404にまとめるため
  * - 更新・削除の成功時は 204 No Content
  */
 
@@ -42,7 +42,7 @@ const routes = app
 
   // 自分の投稿した本一覧を返す（ログイン必須）
   // - 認証ミドルウェアで設定したuserIdで絞り込み
-  // - userIdは自分の本だとわかりきって言るためselectから除外
+  // - userIdは自分の本だと自明なので、 select から除外
   .get("/me", authMiddleware, async (c) => {
     const userId = c.get("userId")
     const books = await prisma.book.findMany({
@@ -89,7 +89,7 @@ const routes = app
   // 本を更新する（ログイン必須、自分の本のみ）
   // - updateMany + where: { id, userId } で「自分の本だけ」を対象に
   // - 404 の意味: 「本がない」か「他人の本」
-  // - 成功時は 204 No Context
+  // - 成功時は 204 No Content
   .put(
     "/:id",
     authMiddleware,
@@ -112,9 +112,9 @@ const routes = app
   )
 
   // 本を削除する（ログイン必須、自分の本のみ）
-  // ^ deleteMany を使う理由は PUT と同じ
+  // - deleteMany を使う理由は PUT と同じ
   // - 404 の意味も PUT と同じ
-  // - 成功時は 204 No Context
+  // - 成功時は 204 No Content
   .delete("/:id", authMiddleware, zValidator("param", bookIdParamSchema), async (c) => {
     const { id } = c.req.valid("param")
     const userId = c.get("userId")
