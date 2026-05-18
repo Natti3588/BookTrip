@@ -69,7 +69,26 @@ const routes = app
   // - 見つからない場合は 404
   .get("/:id", zValidator("param", bookIdParamSchema), async (c) => {
     const { id } = c.req.valid("param")
-    const book = await prisma.book.findUnique({ where: { id } })
+    const book = await prisma.book.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        title: true,
+        author: true,
+        genre: true,
+        publishedYear: true,
+        coverImage: true,
+        description: true,
+        rating: true,
+        createdAt: true,
+        updatedAt: true,
+        user: {
+          select: {
+            name: true,
+          },
+        },
+      },
+    })
     if (!book) return c.json({ error: "本が見つかりません" }, 404)
     return c.json(book)
   })

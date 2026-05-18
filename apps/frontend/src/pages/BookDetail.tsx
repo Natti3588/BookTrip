@@ -150,6 +150,7 @@ const BookDetail = () => {
               <p className="text-sm text-stone-600">
                 {dateLabel}: {new Date(dateValue).toLocaleDateString("ja-JP")}
               </p>
+              <p className="text-sm text-stone-600">投稿者: {book.user.name}</p>
             </div>
           </div>
         </div>
