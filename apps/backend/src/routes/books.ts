@@ -82,6 +82,7 @@ const routes = app
         rating: true,
         createdAt: true,
         updatedAt: true,
+        userId: true,
         user: {
           select: {
             name: true,
