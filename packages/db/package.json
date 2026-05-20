@@ -16,7 +16,7 @@
     "dev": "tsc --watch",
     "generate": "prisma generate",
     "migrate:deploy": "prisma migrate deploy",
-    "seed": "tsx prisma/seed.ts",
+    "seed": "tsx --env-file=../../.env prisma/seed.ts",
     "postinstall": "prisma generate"
   },
   "dependencies": {
