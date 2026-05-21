@@ -50,6 +50,12 @@ export const getMyBooks = async (): Promise<MyBook[]> => {
   return res.json()
 }
 
+export const getRecommendedBooks = async (): Promise<Book[]> => {
+  const res = await client.api.books.recommended.$get()
+  if (!res.ok) throw new Error(`Failed to fetch recommended books: ${res.status}`)
+  return res.json()
+}
+
 // 本を新規登録する BookAddのフォーム送信時に呼ばれる
 // - 失敗時: バックエンドの日本語エラー、またはfallbackをErrorとしてthrow
 export const createBook = async (data: CreateBookInput): Promise<Book> => {
