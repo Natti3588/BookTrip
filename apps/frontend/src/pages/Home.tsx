@@ -3,7 +3,7 @@ import { Star } from "lucide-react"
 import { SiGithub } from "react-icons/si"
 import { Link } from "react-router"
 import { useAuth } from "../contexts/AuthContext"
-import { getBooks } from "../lib/books"
+import { getRecommendedBooks } from "../lib/books"
 
 const Home = () => {
   const { currentUser } = useAuth()
@@ -15,8 +15,8 @@ const Home = () => {
     isError,
     error,
   } = useQuery({
-    queryKey: ["books"],
-    queryFn: getBooks,
+    queryKey: ["books", "recommended"],
+    queryFn: getRecommendedBooks,
   })
 
   if (isLoading) return <p className="text-center py-12 text-stone-600">読み込み中...</p>
@@ -24,9 +24,6 @@ const Home = () => {
     console.error(error)
     return <p className="text-red-600">読み込みに失敗しました</p>
   }
-
-  // おすすめの本 （データベースからLIMITで取得する本を絞る予定）
-  const recommendedBooks = books.slice(0, 6)
 
   return (
     <div className="min-h-screen">
@@ -76,9 +73,9 @@ const Home = () => {
             </Link>
           </div>
 
-          {recommendedBooks.length > 0 ? (
+          {books.length > 0 ? (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-              {recommendedBooks.map((book) => (
+              {books.map((book) => (
                 <Link
                   key={book.id}
                   to={`/books/${book.id}`}
