@@ -203,7 +203,7 @@ const BookAdd = () => {
               type="button"
               onClick={() => navigate("/books")}
               disabled={isSubmitting}
-              className="flex-1 bg-purple-200 text-stone-700 py-2 px-4 rounded-md hover:bg-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 transition-colors"
+              className="flex-1 bg-stone-200 text-stone-700 py-2 px-4 rounded-md hover:bg-stone-300 focus:outline-none focus:ring-2 focus:ring-stone-200 focus:ring-offset-2 transition-colors"
             >
               キャンセル
             </button>

@@ -149,7 +149,6 @@ const Home = () => {
       {/* フッター */}
       <footer className="py-12 bg-stone-800 text-white">
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <p></p>
           <a
             href={GITHUB_URL}
             target="_blank"
