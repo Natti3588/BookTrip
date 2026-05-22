@@ -67,7 +67,8 @@ const BookList = () => {
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-stone-800 mb-4">本の一覧</h1>
         <input
-          type="text"
+          type="search"
+          aria-label="本を検索"
           placeholder="本のタイトル、著者、ジャンルで検索..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
