@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import { BookOpen, Calendar, Star, User } from "lucide-react"
+import { BookOpen, Calendar, Star, User, Search } from "lucide-react"
 import { useState } from "react"
 import { Link, useSearchParams } from "react-router"
 import Toast from "../components/Toast"
@@ -66,13 +66,17 @@ const BookList = () => {
       {showDeletedToast && <Toast message="本を削除しました" onClose={clearDeletedParam} />}
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-stone-800 mb-4">本の一覧</h1>
-        <input
-          type="text"
-          placeholder="本のタイトル、著者、ジャンルで検索..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full max-w-xl px-4 py-2 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white"
-        />
+        <div className="relative max-w-xl">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-stone-400 pointer-events-none" />
+          <input
+            type="search"
+            aria-label="本を検索"
+            placeholder="本のタイトル、著者、ジャンルで検索..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full max-w-xl pl-9 px-4 py-2 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white"
+          />
+        </div>
       </div>
 
       {filteredBooks.length === 0 ? (
