@@ -50,7 +50,7 @@ const SignupPage = () => {
       <div className="bg-white rounded-lg shadow-xl p-8 w-full max-w-md border border-stone-200">
         <div className="flex items-center justify-center mb-8">
           <BookOpen className="w-12 h-12 text-amber-700 mr-3" />
-          <h1 className="text-3xl font-bold text-stone-800">Book Trip</h1>
+          <h1 className="font-display font-bold text-3xl text-stone-800">Book Trip</h1>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>

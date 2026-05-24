@@ -72,7 +72,7 @@ const BookDetail = () => {
 
       <div className="bg-white rounded-lg shadow-md overflow-hidden">
         <div className="bg-stone-50 px-6 py-4 border-b border-stone-200 flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-stone-800">本の詳細</h1>
+          <h1 className="font-serif font-bold text-2xl text-stone-800">本の詳細</h1>
           {isOwner && (
             <div className="flex space-x-2">
               <Link
@@ -107,7 +107,7 @@ const BookDetail = () => {
           </div>
 
           <div className="flex-1">
-            <h2 className="text-3xl font-bold text-stone-800 mb-4">{book.title}</h2>
+            <h2 className="text-3xl font-serif font-bold text-stone-800 mb-4">{book.title}</h2>
 
             <div className="space-y-3 mb-6">
               <div className="flex items-center text-stone-800">

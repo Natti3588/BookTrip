@@ -55,7 +55,7 @@ const BookAdd = () => {
       </button>
 
       <div className="bg-white rounded-lg shadow-md p-8">
-        <h1 className="text-3xl font-bold text-stone-800 mb-6">本を追加</h1>
+        <h1 className="font-serif font-bold text-3xl text-stone-800 mb-6">本を追加</h1>
 
         {serverError && (
           <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md mb-6">
