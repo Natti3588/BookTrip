@@ -20,7 +20,7 @@ const Layout = () => {
           <div className="flex justify-between items-center py-4">
             <Link to="/home" className="flex items-center space-x-2">
               <BookOpen className="w-8 h-8 text-amber-700" />
-              <span className="text-2xl font-bold text-stone-800">Book Trip</span>
+              <span className="font-display text-2xl font-bold text-stone-800">Book Trip</span>
             </Link>
 
             <nav className="flex items-center space-x-3 sm:space-x-4">

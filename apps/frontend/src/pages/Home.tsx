@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query"
 import { Star } from "lucide-react"
 import { SiGithub } from "react-icons/si"
 import { Link } from "react-router"
+import BookCard from "../components/BookCard"
 import { useAuth } from "../contexts/AuthContext"
 import { getRecommendedBooks } from "../lib/books"
 
@@ -30,7 +31,9 @@ const Home = () => {
       {/*ファーストビュー */}
       <section className="min-h-[80vh] flex items-center justify-center bg-linear-to-br from-amber-100 via-orange-100 to-yellow-50 px-4">
         <div className="text-center text-stone-800 max-w-4xl mx-auto">
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 text-amber-900">Book Trip</h1>
+          <h1 className="font-display font-bold text-5xl md:text-7xl mb-6 text-amber-900">
+            Book Trip
+          </h1>
           <p className="text-xl md:text-2xl text-stone-700 mb-8">
             あなたの読書体験を記録し、共有する
           </p>
@@ -76,25 +79,7 @@ const Home = () => {
           {books.length > 0 ? (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
               {books.map((book) => (
-                <Link
-                  key={book.id}
-                  to={`/books/${book.id}`}
-                  className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow"
-                >
-                  <div className="aspect-3/4 bg-stone-200 overflow-hidden">
-                    <img
-                      src={book.coverImage}
-                      alt={book.title}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div className="p-3">
-                    <h3 className="font-bold text-sm text-stone-800 line-clamp-2 mb-1">
-                      {book.title}
-                    </h3>
-                    <p className="text-xs text-stone-600 line-clamp-1">{book.author}</p>
-                  </div>
-                </Link>
+                <BookCard key={book.id} book={book} variant="compact" />
               ))}
             </div>
           ) : (
@@ -114,7 +99,7 @@ const Home = () => {
       {/* Aboutセクション */}
       <section className="py-16 bg-amber-50">
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold text-stone-800 mb-4">読書記録をもっと楽しく</h2>
+          <h2 className="text-3xl font-serif font-bold text-stone-800 mb-4">読書記録をもっと楽しく</h2>
           <p className="text-stone-700 text-lg leading-relaxed mb-8">
             Book Tripは、あなたの読書体験を記録し共有するシンプルなアプリケーションです。
           </p>

@@ -1,7 +1,8 @@
 import { useQuery } from "@tanstack/react-query"
-import { BookOpen, Calendar, Star, User } from "lucide-react"
+import { BookOpen } from "lucide-react"
 import { useState } from "react"
 import { Link } from "react-router"
+import BookCard from "../components/BookCard"
 import { useAuth } from "../contexts/AuthContext"
 import { getMyBooks } from "../lib/books"
 
@@ -37,7 +38,7 @@ const MyBooks = () => {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-stone-800 mb-4">自分の本一覧</h1>
+        <h1 className="font-serif font-bold text-3xl text-stone-800 mb-4">自分の本一覧</h1>
         <input
           type="text"
           placeholder="本のタイトル、著者、ジャンルで検索..."
@@ -73,41 +74,7 @@ const MyBooks = () => {
       ) : (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6">
           {filteredBooks.map((book) => (
-            <Link
-              key={book.id}
-              to={`/books/${book.id}`}
-              className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow"
-            >
-              <div className="aspect-3/4 bg-stone-200 overflow-hidden">
-                <img
-                  src={book.coverImage}
-                  alt={book.title}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="p-4">
-                <h3 className="font-bold text-lg text-stone-800 mb-2 line-clamp-2">{book.title}</h3>
-                <div className="flex items-center text-sm text-stone-700 mb-1">
-                  <User className="w-4 h-4 mr-1" />
-                  <span>{book.author}</span>
-                </div>
-                <div className="flex items-center text-sm text-stone-700 mb-2">
-                  <Calendar className="w-4 h-4 mr-1" />
-                  <span>{book.publishedYear}年</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="inline-block px-2 py-1 bg-amber-100 text-amber-800 text-xs rounded">
-                    {book.genre}
-                  </span>
-                  {book.rating && (
-                    <div className="flex items-center">
-                      <Star className="w-3 h-3 text-amber-500 fill-amber-500 mr-1" />
-                      <span className="text-xs text-stone-700">{book.rating}</span>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </Link>
+            <BookCard key={book.id} book={book} />
           ))}
         </div>
       )}
