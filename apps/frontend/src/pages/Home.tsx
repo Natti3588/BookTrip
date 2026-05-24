@@ -99,7 +99,9 @@ const Home = () => {
       {/* Aboutセクション */}
       <section className="py-16 bg-amber-50">
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-3xl font-serif font-bold text-stone-800 mb-4">読書記録をもっと楽しく</h2>
+          <h2 className="text-3xl font-serif font-bold text-stone-800 mb-4">
+            読書記録をもっと楽しく
+          </h2>
           <p className="text-stone-700 text-lg leading-relaxed mb-8">
             Book Tripは、あなたの読書体験を記録し共有するシンプルなアプリケーションです。
           </p>
