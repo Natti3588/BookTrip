@@ -5,6 +5,7 @@ import { ArrowLeft } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { Link, useNavigate, useParams } from "react-router"
+import Loading from "../components/Loading"
 import NotFoundView from "../components/NotFoundView"
 import { getBook, type UpdateBookInput, updateBook } from "../lib/books"
 
@@ -70,7 +71,7 @@ const BookEdit = () => {
 
   const coverImage = watch("coverImage")
 
-  if (isLoading) return <p className="text-center py-12 text-stone-600">読み込み中...</p>
+  if (isLoading) return <Loading />
   if (isError || !book) return <NotFoundView />
 
   return (

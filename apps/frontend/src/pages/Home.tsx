@@ -3,6 +3,7 @@ import { Star } from "lucide-react"
 import { SiGithub } from "react-icons/si"
 import { Link } from "react-router"
 import BookCard from "../components/BookCard"
+import Loading from "../components/Loading"
 import { useAuth } from "../contexts/AuthContext"
 import { getRecommendedBooks } from "../lib/books"
 
@@ -20,7 +21,7 @@ const Home = () => {
     queryFn: getRecommendedBooks,
   })
 
-  if (isLoading) return <p className="text-center py-12 text-stone-600">読み込み中...</p>
+  if (isLoading) return <Loading />
   if (isError) {
     console.error(error)
     return <p className="text-red-600">読み込みに失敗しました</p>
