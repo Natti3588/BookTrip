@@ -3,6 +3,7 @@ import { ArrowLeft, Calendar, Edit2, Star, Tag, Trash2, User } from "lucide-reac
 import { useState } from "react"
 import { Link, useNavigate, useParams } from "react-router"
 import DeleteConfirmDialog from "../components/DeleteConfirmDialog"
+import Loading from "../components/Loading"
 import NotFoundView from "../components/NotFoundView"
 import Rating from "../components/Rating"
 import { useAuth } from "../contexts/AuthContext"
@@ -48,7 +49,7 @@ const BookDetail = () => {
     }
   }
 
-  if (isLoading) return <p className="text-center py-12 text-stone-600">読み込み中...</p>
+  if (isLoading) return <Loading />
   if (isError || !book) {
     console.error(error)
     return <NotFoundView />

@@ -3,6 +3,7 @@ import { BookOpen, Search } from "lucide-react"
 import { useState } from "react"
 import { Link, useSearchParams } from "react-router"
 import BookCard from "../components/BookCard"
+import Loading from "../components/Loading"
 import Toast from "../components/Toast"
 import { useAuth } from "../contexts/AuthContext"
 import { getBooks } from "../lib/books"
@@ -55,7 +56,7 @@ const BookList = () => {
     )
   })
 
-  if (isLoading) return <p className="text-stone-600">読み込み中...</p>
+  if (isLoading) return <Loading />
   if (isError) {
     console.error(error)
     return <p className="text-red-600">本の取得に失敗しました</p>

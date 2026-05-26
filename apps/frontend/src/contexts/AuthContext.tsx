@@ -24,6 +24,7 @@ import {
 // Contextが公開する useAuthの戻り値型として使う
 type AuthContextValue = {
   currentUser: User | null
+  isLoading: boolean
   signup: (data: SignupInput) => Promise<void>
   login: (data: LoginInput) => Promise<void>
   logout: () => Promise<void>
@@ -40,6 +41,7 @@ const AuthContext = createContext<AuthContextValue | undefined>(undefined)
 // - logout: サーバー結果にかかわらずクライアント側の状態を破棄
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
 
   // 初回マウント時に1回だけ実行
   // - getMe は401を null で返す
@@ -52,6 +54,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         console.error(`Failed to fetch current user:`, err)
         setCurrentUser(null)
       })
+      .finally(() => setIsLoading(false))
   }, [])
 
   // 新規登録 Signup フォームから呼ばれる
@@ -92,7 +95,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setCurrentUser(null)
   }
 
-  const value = { currentUser, signup, login, logout, updateName, deleteAccount }
+  const value = { currentUser, isLoading, signup, login, logout, updateName, deleteAccount }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

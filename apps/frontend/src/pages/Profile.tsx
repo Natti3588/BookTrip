@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { updateNameSchema, updatePasswordSchema } from "@myapp/backend/src/schemas/auth"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
-import { Navigate, useNavigate } from "react-router"
+import { useNavigate } from "react-router"
 import DeleteAccountDialog from "../components/DeleteAccountDialog"
 import PasswordInput from "../components/PasswordInput"
 import { useAuth } from "../contexts/AuthContext"
@@ -43,8 +43,6 @@ const Profile = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [deleteError, setDeleteError] = useState<string | undefined>()
   const [isDeleting, setIsDeleting] = useState(false)
-
-  if (!currentUser) return <Navigate to="/login" replace />
 
   const onSubmitName = async (data: UpdateNameInput) => {
     setNameSuccess(null)
