@@ -1,7 +1,9 @@
 import { BookOpen, Home, Library, Plus } from "lucide-react"
+import { Suspense } from "react"
 import { Link, NavLink, Outlet, useLocation } from "react-router"
 import { useAuth } from "../contexts/AuthContext"
 import GuestMenu from "./GuestMenu"
+import Loading from "./Loading"
 import UserMenu from "./UserMenu"
 
 const navLinkClass = ({ isActive }: { isActive: boolean }) =>
@@ -54,7 +56,9 @@ const Layout = () => {
           location.pathname === "/home" ? "" : "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8"
         }
       >
-        <Outlet />
+        <Suspense fallback={<Loading />}>
+          <Outlet />
+        </Suspense>
       </main>
     </div>
   )
