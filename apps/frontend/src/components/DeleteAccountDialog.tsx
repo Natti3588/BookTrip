@@ -4,7 +4,7 @@ import { useState } from "react"
 type Props = {
   isOpen: boolean
   isDeleting: boolean
-  errorMessage?: string
+  errorMessage?: string | null
   onConfirm: (password: string) => void
   onCancel: () => void
 }
